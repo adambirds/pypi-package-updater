@@ -459,36 +459,7 @@ This project uses **PyPI Trusted Publishing** for secure, token-free publishing 
 
 MIT License - see LICENSE file for details.
 
+
 ## Changelog
 
-### 0.2.0 (Latest)
-
-#### 🚀 New Features
-- **Universal Format Support**: Added support for `setup.py` and `pyproject.toml` files
-- **Enhanced CLI**: Improved command-line interface with better error handling
-- **Format Detection**: Automatic detection and parsing of multiple dependency formats
-
-#### 🏗️ Infrastructure 
-- **CI/CD Pipeline**: Complete GitHub Actions workflow with multi-Python testing
-- **Code Quality**: Comprehensive linting with Black, isort, and mypy
-- **Coverage**: 99% test coverage with 263 comprehensive tests
-- **Documentation**: Enhanced README with complete setup instructions
-
-#### 🧪 Testing
-- **Branch Coverage**: Added comprehensive branch coverage tests
-- **Error Handling**: Extensive error condition testing
-- **Format Testing**: Tests for all supported file formats
-
-#### ⚙️ Configuration
-- **pyproject.toml**: Complete tool configuration for development
-- **codecov.yaml**: Strict coverage requirements and reporting
-- **Automated Linting**: scripts/lint.py for easy code quality checks
-
-### 0.1.0 (Initial Release)
-
-- Basic package update functionality
-- Support for requirements.in files with includes
-- Interactive and non-interactive modes
-- Dry-run capability
-- Integration with existing compilation scripts
-- Comprehensive error handling and logging
+See [CHANGELOG.md](./CHANGELOG.md) for release history and details.
