@@ -257,21 +257,29 @@ jobs:
         snapcraft --destructive-mode
 
     - name: Upload Debian Package
-      uses: actions/upload-release-asset@v1
+      run: |
+        # Find the actual .deb file created
+        DEB_FILE=$(find . -name "*.deb" | head -1)
+        if [ -n "$DEB_FILE" ]; then
+          echo "Found Debian package: $DEB_FILE"
+          # Use GitHub CLI to upload the asset
+          gh release upload ${{ github.event.release.tag_name }} "$DEB_FILE" --clobber
+        else
+          echo "No .deb file found"
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./pypi-package-updater_${{ github.event.release.tag_name }}_all.deb
-        asset_name: pypi-package-updater_${{ github.event.release.tag_name }}_all.deb
-        asset_content_type: application/vnd.debian.binary-package
         
     - name: Upload Snap Package
-      uses: actions/upload-release-asset@v1
+      run: |
+        # Find the actual .snap file created
+        SNAP_FILE=$(find . -name "*.snap" | head -1)
+        if [ -n "$SNAP_FILE" ]; then
+          echo "Found Snap package: $SNAP_FILE"
+          # Use GitHub CLI to upload the asset
+          gh release upload ${{ github.event.release.tag_name }} "$SNAP_FILE" --clobber
+        else
+          echo "No .snap file found"
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./pypi-package-updater_${{ github.event.release.tag_name }}_amd64.snap
-        asset_name: pypi-package-updater_${{ github.event.release.tag_name }}_amd64.snap
-        asset_content_type: application/octet-stream
