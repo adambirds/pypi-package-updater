@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 from .parser import RequirementsParser, Requirement
 from .pypi_client import PyPIClient, PackageInfo
+from .formats import UniversalParser, FileUpdater, FormatDetector, FileFormat
 
 logger = logging.getLogger(__name__)
 
@@ -46,10 +47,17 @@ class UpdateSummary:
 class PyPIUpdater:
     """Main class for updating package versions in requirements files."""
     
-    def __init__(self, requirements_dir: str = "requirements", tools_dir: str = "tools"):
+    def __init__(self, requirements_dir: str = "requirements", tools_dir: str = "tools",
+                 include_setup_py: bool = False, include_pyproject_toml: bool = False,
+                 format_override: Optional[FileFormat] = None):
         self.requirements_dir = Path(requirements_dir)
         self.tools_dir = Path(tools_dir)
+        self.include_setup_py = include_setup_py
+        self.include_pyproject_toml = include_pyproject_toml
+        self.format_override = format_override
         self.parser = RequirementsParser(requirements_dir)
+        self.universal_parser = UniversalParser()
+        self.file_updater = FileUpdater()
         self.pypi_client = PyPIClient()
         
         # Configure logging
@@ -57,19 +65,65 @@ class PyPIUpdater:
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
+
+    def find_requirements_files(self) -> List[Path]:
+        """Find all requirements files based on configuration."""
+        files = []
+        
+        # Always include .in files (our primary format)
+        if self.requirements_dir.exists():
+            files.extend(self.requirements_dir.glob("*.in"))
+            
+            # Also include .txt files if no format override
+            if self.format_override is None or self.format_override == FileFormat.REQUIREMENTS_TXT:
+                files.extend(self.requirements_dir.glob("*.txt"))
+        
+        # Include setup.py if requested - check both current dir and requirements dir
+        if self.include_setup_py:
+            # Check current directory
+            setup_py = Path("setup.py")
+            if setup_py.exists():
+                files.append(setup_py)
+            # Also check requirements directory
+            setup_py_req = self.requirements_dir / "setup.py"
+            if setup_py_req.exists():
+                files.append(setup_py_req)
+        
+        # Include pyproject.toml if requested - check both current dir and requirements dir
+        if self.include_pyproject_toml:
+            # Check current directory
+            pyproject = Path("pyproject.toml")
+            if pyproject.exists():
+                files.append(pyproject)
+            # Also check requirements directory  
+            pyproject_req = self.requirements_dir / "pyproject.toml"
+            if pyproject_req.exists():
+                files.append(pyproject_req)
+            # Also check for Poetry format
+            pyproject_poetry = self.requirements_dir / "pyproject-poetry.toml"
+            if pyproject_poetry.exists():
+                files.append(pyproject_poetry)
+        
+        # If specific files are in the current directory, include them
+        for pattern in ["requirements.txt", "requirements.in"]:
+            file_path = Path(pattern)
+            if file_path.exists() and file_path not in files:
+                files.append(file_path)
+        
+        return sorted(set(files))
     
     async def check_for_updates(self, files: Optional[List[str]] = None) -> Dict[str, List[PackageInfo]]:
         """
         Check for updates across all or specified requirements files.
         
         Args:
-            files: Optional list of specific files to check. If None, checks all .in files.
+            files: Optional list of specific files to check. If None, discovers files automatically.
             
         Returns:
             Dictionary mapping file paths to lists of PackageInfo objects
         """
         if files is None:
-            file_paths = self.parser.find_all_requirements_files()
+            file_paths = self.find_requirements_files()
         else:
             file_paths = [Path(f) for f in files]
         
@@ -78,13 +132,43 @@ class PyPIUpdater:
         for file_path in file_paths:
             logger.info(f"Checking updates for {file_path}")
             
-            packages = self.parser.get_package_requirements(str(file_path))
+            # Use universal parser for different file formats
+            try:
+                file_format = self.format_override or FormatDetector.detect_format(file_path)
+                packages = self.universal_parser.parse_file(file_path, file_format)
+            except Exception as e:
+                logger.error(f"Failed to parse {file_path}: {e}")
+                # Fallback to original parser for .in/.txt files
+                if file_path.suffix in ['.in', '.txt']:
+                    packages = self.parser.get_package_requirements(str(file_path))
+                else:
+                    packages = {}
+            
             if not packages:
                 logger.info(f"No packages found in {file_path}")
                 results[str(file_path)] = []
                 continue
             
-            package_infos = await self.pypi_client.check_package_updates(packages)
+            # Convert to list of tuples for PyPI client
+            package_tuples = []
+            
+            # Handle both dictionary format (from universal parser) and list format (from fallback parser)
+            if isinstance(packages, dict):
+                for name, version_spec in packages.items():
+                    # Extract just the version number from version specs like ">=1.0.0"
+                    import re
+                    version_match = re.search(r'[\d.]+', version_spec)
+                    current_version = version_match.group() if version_match else "0.0.0"
+                    package_tuples.append((name, current_version))
+            elif isinstance(packages, list):
+                # packages is already a list of tuples from fallback parser
+                package_tuples = packages
+            else:
+                logger.warning(f"Unexpected packages format in {file_path}: {type(packages)}")
+                results[str(file_path)] = []
+                continue
+            
+            package_infos = await self.pypi_client.check_package_updates(package_tuples)
             results[str(file_path)] = package_infos
             
             # Log summary for this file

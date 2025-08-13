@@ -1,13 +1,24 @@
 """
-PyPI Updater - A tool to automatically update Python package versions in requirements files.
+PyPI Updater - Automatically update Python package versions in requirements files.
 """
 
-__version__ = "0.1.0"
-__author__ = "Adam Birds"
-__email__ = "adam@adbsoftwaresolutions.com"
-
-from .updater import PyPIUpdater
-from .parser import RequirementsParser
+from .updater import PyPIUpdater, UpdateResult, UpdateSummary
+from .parser import RequirementsParser, Requirement
 from .pypi_client import PyPIClient, PackageInfo
+from .formats import UniversalParser, FileUpdater, FormatDetector, FileFormat
 
-__all__ = ["PyPIUpdater", "RequirementsParser", "PyPIClient", "PackageInfo"]
+__version__ = "0.1.0"
+
+__all__ = [
+    "PyPIUpdater", 
+    "RequirementsParser", 
+    "PyPIClient", 
+    "PackageInfo", 
+    "UpdateResult", 
+    "UpdateSummary", 
+    "Requirement",
+    "UniversalParser",
+    "FileUpdater", 
+    "FormatDetector", 
+    "FileFormat"
+]

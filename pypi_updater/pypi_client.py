@@ -110,21 +110,3 @@ class PyPIClient:
             homepage=package_data.get("home_page"),
             summary=package_data.get("summary")
         )
-    
-    async def get_all_versions(self, package_name: str) -> List[str]:
-        """Get all available versions for a package."""
-        info = await self.get_package_info(package_name)
-        
-        if not info or "releases" not in info:
-            return []
-        
-        versions = list(info["releases"].keys())
-        
-        # Sort versions using packaging.version for proper semantic versioning
-        try:
-            versions.sort(key=lambda v: version.parse(v), reverse=True)
-        except version.InvalidVersion:
-            # Fallback to string sorting if version parsing fails
-            versions.sort(reverse=True)
-        
-        return versions
