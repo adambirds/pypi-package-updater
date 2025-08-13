@@ -196,6 +196,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
+        ref: ${{ github.ref }}
         fetch-depth: 0
         fetch-tags: true
         
@@ -204,6 +205,16 @@ jobs:
       with:
         name: dist-artifacts
         path: dist/
+        
+    - name: Debug git and version state
+      run: |
+        echo "Git ref: ${{ github.ref }}"
+        echo "Git ref type: ${{ github.ref_type }}"
+        echo "Git ref name: ${{ github.ref_name }}"
+        echo "Git SHA: ${{ github.sha }}"
+        git log --oneline -3
+        git tag --points-at HEAD
+        python3 -c "import setuptools_scm; print('setuptools_scm version:', setuptools_scm.get_version())"
         
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -241,12 +252,22 @@ jobs:
         sudo snap install snapcraft --classic
         snapcraft --destructive-mode
 
-    - name: Upload Release Assets
+    - name: Upload Debian Package
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./pypi-package-updater-0.2.0-x86_64.AppImage
-        asset_name: pypi-package-updater-${{ github.event.release.tag_name }}-x86_64.AppImage
+        asset_path: ./pypi-package-updater_${{ github.event.release.tag_name }}_all.deb
+        asset_name: pypi-package-updater_${{ github.event.release.tag_name }}_all.deb
+        asset_content_type: application/vnd.debian.binary-package
+        
+    - name: Upload Snap Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./pypi-package-updater_${{ github.event.release.tag_name }}_amd64.snap
+        asset_name: pypi-package-updater_${{ github.event.release.tag_name }}_amd64.snap
         asset_content_type: application/octet-stream

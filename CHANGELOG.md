@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.12] - 2025-08-13
+## [0.2.13] - 2025-08-13
 
 ### 🔧 CI/CD
 - Fixed version generation for tag-based releases to prevent changelog conversion commits during tag builds.
