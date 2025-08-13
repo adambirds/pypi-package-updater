@@ -1,40 +1,6 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = "python-package-updater"
-description = "A tool to update Python package dependencies across multiple file formats"
-readme = "README.md"
-requires-python = ">=3.11"
-license = {text = "MIT"}
-authors = [
-    {name = "Adam Birds", email = "adam.birds@adbirds.co.uk"},
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: System :: Software Distribution",
-]
-dynamic = ["version"]
-
-[project.urls]
-Homepage = "https://github.com/adambirds/python-package-updater"
-Repository = "https://github.com/adambirds/python-package-updater"
-Issues = "https://github.com/adambirds/python-package-updater/issues"
-
-[project.scripts]
-update-packages = "pypi_updater.cli:main"
-
-[tool.setuptools_scm]
-write_to = "pypi_updater/_version.py"
 
 [tool.black]
 line-length = 100
