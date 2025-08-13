@@ -33,6 +33,3 @@ parts:
       - requirements/common.txt
     stage-packages:
       - python3-pkg-resources
-    override-pull: |
-      craftctl default
-      craftctl set version="$(python3 -c 'import pypi_updater; print(pypi_updater.__version__)')"
