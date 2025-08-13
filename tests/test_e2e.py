@@ -8,6 +8,7 @@ including CLI integration, file processing, and PyPI integration.
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -68,7 +69,7 @@ gunicorn>=20.0.0
     def test_cli_help_command(self):
         """Test that CLI help command works."""
         result = subprocess.run(
-            ["./.venv/bin/python", "update_packages.py", "--help"],
+            [sys.executable, "update_packages.py", "--help"],
             capture_output=True,
             text=True,
             cwd=Path.cwd(),
@@ -81,7 +82,7 @@ gunicorn>=20.0.0
         """Test CLI in check-only mode."""
         result = subprocess.run(
             [
-                "./.venv/bin/python",
+                sys.executable,
                 str(Path.cwd() / "update_packages.py"),
                 "--check-only",
                 "--requirements-dir",
@@ -100,7 +101,7 @@ gunicorn>=20.0.0
         """Test CLI in dry-run mode."""
         result = subprocess.run(
             [
-                "./.venv/bin/python",
+                sys.executable,
                 str(Path.cwd() / "update_packages.py"),
                 "--dry-run",
                 "--requirements-dir",
@@ -159,7 +160,7 @@ this-package-definitely-does-not-exist-on-pypi>=1.0.0
         """Test CLI with multiple requirements files."""
         result = subprocess.run(
             [
-                "./.venv/bin/python",
+                sys.executable,
                 str(Path.cwd() / "update_packages.py"),
                 "--check-only",
                 "--requirements-dir",
@@ -178,7 +179,7 @@ this-package-definitely-does-not-exist-on-pypi>=1.0.0
         """Test CLI when no files are specified (should discover automatically)."""
         result = subprocess.run(
             [
-                "./.venv/bin/python",
+                sys.executable,
                 str(Path.cwd() / "update_packages.py"),
                 "--check-only",
                 "--requirements-dir",
@@ -220,7 +221,7 @@ echo "# Compiled" > requirements/common.txt
         """Test error handling with invalid directory paths."""
         result = subprocess.run(
             [
-                "./.venv/bin/python",
+                sys.executable,
                 str(Path.cwd() / "update_packages.py"),
                 "--check-only",
                 "--requirements-dir",
