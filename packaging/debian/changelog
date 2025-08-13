@@ -2,6 +2,7 @@ pypi-package-updater (0.2.12-1) unstable; urgency=medium
 
   * Fixed version generation for tag-based releases to prevent changelog conversion commits during tag builds.
   * Added conditional logic to skip changelog conversion when building from tags, ensuring proper version calculation.
+  * Improved Debian build reliability by using dynamic tarball detection instead of wildcard patterns for sdist extraction.
 
  -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Wed, 13 Aug 2025 00:00:00 +0000
 pypi-package-updater (0.2.11-1) unstable; urgency=medium
