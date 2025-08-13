@@ -1,0 +1,8 @@
+pypi-package-updater (0.2.0-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #XXXXXX)
+  * Tool to update Python package dependencies across multiple formats
+  * Support for requirements.txt, setup.py, and pyproject.toml files
+  * Automatic PyPI version checking and safe update workflows
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Wed, 13 Aug 2025 12:00:00 +0000

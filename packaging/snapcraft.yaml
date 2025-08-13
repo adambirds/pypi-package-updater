@@ -1,0 +1,35 @@
+name: pypi-package-updater
+base: core22
+version: '0.2.0'
+summary: Tool to update Python package dependencies
+description: |
+  A Python package that automatically checks PyPI for new versions of your
+  dependencies and updates your requirements files with comprehensive format
+  support.
+
+  Features:
+  - Automatic update detection from PyPI
+  - Universal format support (requirements.txt, setup.py, pyproject.toml)
+  - Dependency-aware updates with correct ordering
+  - Safe dry-run mode and interactive confirmation
+  - Integration with existing compilation scripts
+
+grade: stable
+confinement: strict
+
+apps:
+  pypi-package-updater:
+    command: bin/pypi-update
+    plugs:
+      - home
+      - network
+      - network-bind
+
+parts:
+  pypi-package-updater:
+    plugin: python
+    source: .
+    python-requirements:
+      - requirements/common.in
+    stage-packages:
+      - python3-pkg-resources

@@ -1,0 +1,32 @@
+Source: pypi-package-updater
+Section: utils
+Priority: optional
+Maintainer: Adam Birds <adam.birds@adbwebdesigns.co.uk>
+Build-Depends: debhelper-compat (= 13),
+               dh-python,
+               python3-all,
+               python3-setuptools,
+               python3-aiohttp,
+               python3-packaging
+Standards-Version: 4.6.0
+Homepage: https://github.com/adambirds/pypi-package-updater
+Vcs-Git: https://github.com/adambirds/pypi-package-updater.git
+Vcs-Browser: https://github.com/adambirds/pypi-package-updater
+
+Package: pypi-package-updater
+Architecture: all
+Depends: ${misc:Depends},
+         ${python3:Depends},
+         python3-aiohttp,
+         python3-packaging
+Description: Tool to update Python package dependencies
+ A Python package that automatically checks PyPI for new versions of your
+ dependencies and updates your requirements files with comprehensive format
+ support.
+ .
+ Features:
+  * Automatic update detection from PyPI
+  * Universal format support (requirements.txt, setup.py, pyproject.toml)
+  * Dependency-aware updates with correct ordering
+  * Safe dry-run mode and interactive confirmation
+  * Integration with existing compilation scripts
