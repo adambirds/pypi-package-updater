@@ -3,7 +3,7 @@ PyPI Updater - Automatically update Python package versions in requirements file
 """
 
 try:
-    from ._version import version as __version__
+    from ._version import version as __version__  # type: ignore
 except ImportError:
     # Fallback for development without installed package
     __version__ = "unknown"
