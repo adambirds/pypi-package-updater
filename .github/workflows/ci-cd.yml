@@ -168,6 +168,7 @@ jobs:
 
     - name: Build Snap Package (Test)
       run: |
+        python3 -m pip install setuptools_scm
         VERSION=$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')
         snapcraft --version="$VERSION"
 
@@ -215,6 +216,7 @@ jobs:
 
     - name: Build Snap package with dynamic version
       run: |
+        python3 -m pip install setuptools_scm
         VERSION=$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')
         snapcraft --version="$VERSION"
 
