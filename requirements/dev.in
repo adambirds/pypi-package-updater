@@ -15,3 +15,4 @@ pytest-cov>=4.0
 
 # Build and dependency management tools
 pip-tools>=7.0
+setuptools_scm>=8.0
