@@ -58,11 +58,10 @@ readme_file = Path(__file__).parent / "README.md"
 long_description = readme_file.read_text(encoding="utf-8") if readme_file.exists() else ""
 
 # Read version from pypi_updater/__init__.py
-version = "0.2.0"  # We can enhance this later with dynamic versioning
 
 setup(
     name="pypi-package-updater",  # Available PyPI name suggestion
-    version=version,
+    use_scm_version=True,
     description="A tool to update Python package dependencies across multiple file formats",
     long_description=long_description,
     long_description_content_type="text/markdown",
