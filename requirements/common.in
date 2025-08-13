@@ -1,3 +1,6 @@
 # Core runtime dependencies for PyPI Updater
 aiohttp>=3.8.0
 packaging>=21.0
+
+# TOML support for Python < 3.11
+tomli>=1.2.0
