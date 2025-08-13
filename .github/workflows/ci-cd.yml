@@ -84,6 +84,7 @@ jobs:
     name: Test Build
     runs-on: ubuntu-latest
     needs: [test, lint]
+    if: github.event_name != 'release'
     
     steps:
     - name: Checkout code
@@ -186,7 +187,6 @@ jobs:
   publish-pypi:
     name: Publish to PyPI and Package Managers
     runs-on: ubuntu-latest
-    needs: [test, lint, build]
     if: github.event_name == 'release' && github.event.action == 'published'
     permissions:
       id-token: write
@@ -200,15 +200,15 @@ jobs:
         fetch-depth: 0
         fetch-tags: true
         
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        name: dist-artifacts
-        path: dist/
+        python-version: '3.12'
         
-    - name: Install setuptools_scm for version detection
+    - name: Install build dependencies
       run: |
-        python3 -m pip install setuptools_scm
+        python -m pip install --upgrade pip
+        pip install build twine setuptools_scm
         
     - name: Debug git and version state
       run: |
@@ -219,6 +219,18 @@ jobs:
         git log --oneline -3
         git tag --points-at HEAD
         python3 -c "import setuptools_scm; print('setuptools_scm version:', setuptools_scm.get_version())"
+        
+    - name: Clean up previous build artifacts
+      run: |
+        rm -rf dist/ build/ *.egg-info
+        
+    - name: Build package fresh from tag
+      run: |
+        python -m build --sdist --wheel --outdir dist/
+        
+    - name: Check distribution
+      run: |
+        python -m twine check dist/*
         
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -237,8 +249,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp python3-setuptools-scm python3-build
-        python3 -m build --sdist
-        # Extract the sdist - find the actual tar.gz file
+        # Use the fresh sdist we just built
         TARBALL=$(find dist/ -name "*.tar.gz" | head -1)
         tar -xzf "$TARBALL"
         cd pypi_package_updater-*
