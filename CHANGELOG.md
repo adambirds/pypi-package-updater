@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.6] - 2025-08-13
+
+### 🛠️ Packaging
+- Disabled `dh_usrlocal` in `debian/rules` to prevent build errors when installing console scripts. This ensures correct installation paths for Python scripts and resolves CI build failures.
+
 ## [0.2.5] - 2025-08-13
 
 ### 🏗️ Packaging

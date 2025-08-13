@@ -19,3 +19,5 @@ override_dh_auto_test:
 
 override_dh_auto_install:
 	python3 setup.py install --root=$(CURDIR)/debian/pypi-package-updater --prefix=/usr
+
+override_dh_usrlocal:
