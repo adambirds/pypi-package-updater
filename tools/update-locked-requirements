@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -e
+
+# Make sure we're in a virtual environment
+if [ -z "$VIRTUAL_ENV" ] && [ ! -d .venv/bin ]; then
+    echo "Warning: No virtual environment detected"
+fi
+
+compile_requirements() {
+    source="$1"
+    output="$2"
+
+    echo "Compiling $output from $source"
+    
+    # Use pip-tools to compile requirements (prefer virtual environment)
+    PIP_COMPILE_CMD=""
+    
+    if [ -d .venv/bin ] && [ -x .venv/bin/pip-compile ]; then
+        PIP_COMPILE_CMD=".venv/bin/pip-compile"
+    elif command -v pip-compile >/dev/null 2>&1; then
+        PIP_COMPILE_CMD="pip-compile"
+    fi
+    
+    if [ -n "$PIP_COMPILE_CMD" ]; then
+        $PIP_COMPILE_CMD --quiet --resolver=backtracking --allow-unsafe --generate-hashes --no-strip-extras --output-file "$output" "$source"
+    else
+        echo "pip-tools not found. Install with: pip install pip-tools"
+        echo "For now, copying source to output..."
+        cp "$source" "$output"
+    fi
+
+    # Work around permissions issue
+    chmod a+r "$output"
+}
+
+OUTPUT_BASE_DIR='requirements'
+
+# Parse arguments
+if [ $# -gt 0 ]; then
+    while [ "$1" != "" ]; do
+        case $1 in
+        --output-dir)
+            shift
+            OUTPUT_BASE_DIR=$(readlink -m "$1")
+            ;;
+        *)
+            echo "Invalid arguments passed."
+            echo "Usage: $0 [--output-dir <path-to-output-dir>]"
+            exit 1
+            ;;
+        esac
+        shift
+    done
+fi
+
+# Compile in dependency order
+echo "=== Compiling Python Package Updater Requirements ==="
+
+# First compile the base requirements
+compile_requirements requirements/pip.in "$OUTPUT_BASE_DIR/pip.txt"
+compile_requirements requirements/common.in "$OUTPUT_BASE_DIR/common.txt"
+
+# Then compile requirements that depend on common
+compile_requirements requirements/prod.in "$OUTPUT_BASE_DIR/prod.txt"
+compile_requirements requirements/test.in "$OUTPUT_BASE_DIR/test.txt"
+
+# Finally compile dev requirements (which depend on test)
+compile_requirements requirements/dev.in "$OUTPUT_BASE_DIR/dev.txt"
+
+echo "=== Requirements compilation complete ==="
