@@ -208,13 +208,13 @@ jobs:
         git commit -m "ci: update debian changelog from CHANGELOG.md" || echo "No changes to commit"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
         
-    - name: Build Debian Package (Test)
+    - name: Build Debian Package
       run: |
         sudo apt-get update
         sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp python3-setuptools-scm python3-build
         python3 -m build --sdist
         tar -xzf dist/*.tar.gz
-        cd pypi-package-updater-*
+        cd pypi_package_updater-*
         cp -r ../packaging/debian .
         dpkg-buildpackage -us -uc
 
