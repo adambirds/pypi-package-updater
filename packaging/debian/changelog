@@ -1,3 +1,11 @@
+pypi-package-updater (0.2.15-1) unstable; urgency=medium
+
+  * Fixed duplicate setuptools_scm configuration causing "version already set" warnings during package builds.
+  * Removed `use_scm_version=True` from setup.py since setuptools_scm is already configured in pyproject.toml.
+  * Added `setup_requires=['setuptools_scm']` to setup.py for proper version detection.
+  * Maintained existing requirements file structure while resolving version conflicts.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Thu, 14 Aug 2025 00:00:00 +0000
 pypi-package-updater (0.2.14-1) unstable; urgency=medium
 
   * Fixed version generation for release builds by making publish job independent from build artifacts.

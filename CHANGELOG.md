@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.15] - 2025-08-14
+
+### 🔧 Build System
+- Fixed duplicate setuptools_scm configuration causing "version already set" warnings during package builds.
+- Removed `use_scm_version=True` from setup.py since setuptools_scm is already configured in pyproject.toml.
+- Added `setup_requires=['setuptools_scm']` to setup.py for proper version detection.
+- Maintained existing requirements file structure while resolving version conflicts.
+
 ## [0.2.14] - 2025-08-13
 
 ### 🔧 CI/CD
