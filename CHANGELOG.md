@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.11] - 2025-08-13
+
+### 🚀 Features
+- Added `.github/FUNDING.yml` for GitHub Sponsors support.
+
+### 🛠️ CI/CD
+- CI now tests Debian and Snap builds after publishing to Test PyPI, catching packaging issues before release.
+- Added `scripts/changelog_to_debian.py` to convert `CHANGELOG.md` to Debian changelog format.
+- CI step now runs the changelog conversion script and commits the updated Debian changelog before building the Debian package.
+
 ## [0.2.10] - 2025-08-13
 
 ### Build - 2025-08-13

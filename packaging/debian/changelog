@@ -1,8 +1,84 @@
-pypi-package-updater (0.2.0-1) unstable; urgency=medium
+pypi-package-updater (0.2.10-1) unstable; urgency=medium
 
-  * Initial release. (Closes: #XXXXXX)
-  * Tool to update Python package dependencies across multiple formats
-  * Support for requirements.txt, setup.py, and pyproject.toml files
-  * Automatic PyPI version checking and safe update workflows
+  * Fix missing comma in dependency setup.
 
- -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Wed, 13 Aug 2025 12:00:00 +0000
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.9-1) unstable; urgency=medium
+
+  * Remove AppImage as no longer required.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.8-1) unstable; urgency=medium
+
+  * Added FUSE installation step to CI workflow to fix AppImage build errors caused by missing `libfuse.so.2`.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.7-1) unstable; urgency=medium
+
+  * Fixed AppImage build script to install `setuptools_scm` before using it for version detection, preventing missing module errors in CI.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.6-1) unstable; urgency=medium
+
+  * Disabled `dh_usrlocal` in `debian/rules` to prevent build errors when installing console scripts. This ensures correct installation paths for Python scripts and resolves CI build failures.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.5-1) unstable; urgency=medium
+
+  * Removed `debian/compat` file to follow Debian packaging best practices and avoid debhelper compat level conflicts.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.4-1) unstable; urgency=medium
+
+  * Setuptools_scm now uses `local_scheme = "no-local-version"` to remove `+` from dev version strings, improving PyPI/TestPyPI compatibility for non-tagged builds.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.3-1) unstable; urgency=medium
+
+  * CI/CD workflow now builds Snap packages with dynamic versioning from setuptools_scm.
+  * All package formats (PyPI, Debian, AppImage, Snap) now use the same automated version.
+  * Improved workflow automation and consistency for releases.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.2-1) unstable; urgency=medium
+
+  * CI/CD workflow now always fetches tags for all jobs, ensuring setuptools_scm correctly detects the version from Git tags in all build and publish steps.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
+pypi-package-updater (0.2.1-1) unstable; urgency=medium
+
+  * CI/CD workflow now triggers on both tag creation and GitHub release events.
+  * Debian build step now installs all required dependencies (`debhelper-compat`, `python3-all`, `python3-aiohttp`).
+  * Versioning is now automated using `setuptools_scm`.
+  * Moved changelog from README.md to this file for easier tracking.
+  * Linked changelog from README.md.
+  * Universal Format Support: Added support for `setup.py` and `pyproject.toml` files
+  * Enhanced CLI: Improved command-line interface with better error handling
+  * Format Detection: Automatic detection and parsing of multiple dependency formats
+  * CI/CD Pipeline: Complete GitHub Actions workflow with multi-Python testing
+  * Code Quality: Comprehensive linting with Black, isort, and mypy
+  * Coverage: 99% test coverage with 263 comprehensive tests
+  * Documentation: Enhanced README with complete setup instructions
+  * Branch Coverage: Added comprehensive branch coverage tests
+  * Error Handling: Extensive error condition testing
+  * Format Testing: Tests for all supported file formats
+  * pyproject.toml: Complete tool configuration for development
+  * codecov.yaml: Strict coverage requirements and reporting
+  * Automated Linting: scripts/lint.py for easy code quality checks
+  * Basic package update functionality
+  * Support for requirements.in files with includes
+  * Interactive and non-interactive modes
+  * Dry-run capability
+  * Integration with existing compilation scripts
+  * Comprehensive error handling and logging
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000

@@ -141,6 +141,15 @@ jobs:
         repository-url: https://test.pypi.org/legacy/
         skip-existing: true
 
+    - name: Convert CHANGELOG.md to Debian changelog
+      run: |
+        python3 scripts/changelog_to_debian.py
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git add packaging/debian/changelog
+        git commit -m "ci: update debian changelog from CHANGELOG.md" || echo "No changes to commit"
+        git push
+
     - name: Build Debian Package (Test)
       run: |
         sudo apt-get update
