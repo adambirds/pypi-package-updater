@@ -399,14 +399,19 @@ To enable full CI/CD functionality, configure these repository secrets:
    # Add to GitHub repo settings → Secrets and variables → Actions
    ```
 
-2. **`PYPI_API_TOKEN`** - For automated PyPI publishing
+2. **`PAT_TOKEN`** - Personal Access Token for updating homebrew tap
    ```bash
-   # Create at https://pypi.org/manage/account/token/
-   # Scope: Entire account or specific project
-   # Add as repository secret named: PYPI_API_TOKEN
+   # Create at GitHub Settings → Developer settings → Personal access tokens
+   # Scope: repo (full repository access)
+   # Add as repository secret named: PAT_TOKEN
+   # Used to update the separate homebrew tap repository
    ```
 
-#### Optional Secrets
+#### PyPI Publishing
+
+This project uses **PyPI Trusted Publishing** for secure, token-free publishing to PyPI. No `PYPI_API_TOKEN` is required - the publishing is authenticated automatically through GitHub's OIDC provider.
+
+#### Automatically Provided
 
 - **`GITHUB_TOKEN`** - Automatically provided by GitHub Actions
 
