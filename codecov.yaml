@@ -1,0 +1,87 @@
+codecov:
+  # Require CI to pass before considering coverage
+  require_ci_to_pass: yes
+  
+  # Don't wait for CI to finish before processing coverage
+  notify:
+    wait_for_ci: no
+
+coverage:
+  # Precision for coverage percentages  
+  precision: 2
+  
+  # Round coverage percentages
+  round: down
+  
+  # Coverage range
+  range: "70...100"
+  
+  status:
+    project:
+      default:
+        # Target coverage percentage
+        target: 95%
+        # Allow 2% drop in coverage
+        threshold: 2%
+        # Only consider coverage if changes affect >10% of project
+        if_ci_failed: error
+        
+    patch:
+      default:
+        # New code should have high coverage
+        target: 90%
+        # Allow 5% variance for patches
+        threshold: 5%
+        # Only if not informational
+        if_not_found: success
+        
+    changes:
+      default:
+        # Changed lines coverage
+        target: 85%
+        threshold: 3%
+
+comment:
+  layout: "reach,diff,flags,tree,reach"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+
+ignore:
+  # Ignore test files from coverage reports
+  - "tests/**/*"
+  - "test_*"
+  - "**/test_*.py"
+  - "**/*_test.py"
+  # Ignore setup and configuration files
+  - "setup.py" 
+  - "conftest.py"
+  - "**/conftest.py"
+  # Ignore version files
+  - "_version.py"
+  - "**/_version.py"
+  # Ignore example/demo files
+  - "examples/**/*"
+  - "demo/**/*"
+  - "docs/**/*"
+  # Ignore tools and utility scripts
+  - "tools/**/*"
+  - "scripts/**/*"
+
+flags:
+  # Define flags for different test types
+  unit:
+    paths:
+      - pypi_updater/
+    carryforward: true
+    
+  integration:
+    paths:
+      - pypi_updater/
+    carryforward: true
+    
+  python:
+    paths:
+      - pypi_updater/
+    carryforward: true
