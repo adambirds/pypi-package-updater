@@ -171,6 +171,12 @@ jobs:
 
     - name: Build Snap Package (Test)
       run: |
+        sudo apt update
+        sudo apt install -y snapd
+        sudo systemctl start snapd
+        sudo systemctl enable snapd
+        sudo snap wait system seed.loaded
+        sudo snap install core24
         sudo snap install snapcraft --classic
         snapcraft --destructive-mode
 
@@ -220,6 +226,12 @@ jobs:
 
     - name: Build Snap package with dynamic version
       run: |
+        sudo apt update
+        sudo apt install -y snapd
+        sudo systemctl start snapd
+        sudo systemctl enable snapd
+        sudo snap wait system seed.loaded
+        sudo snap install core24
         sudo snap install snapcraft --classic
         snapcraft --destructive-mode
 

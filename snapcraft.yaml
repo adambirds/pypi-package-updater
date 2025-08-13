@@ -1,5 +1,5 @@
 name: pypi-package-updater
-base: core22
+base: core24
 version: git
 summary: Tool to update Python package dependencies
 description: |
