@@ -21,6 +21,8 @@ A Python package that automatically checks PyPI for new versions of your depende
 
 ## Installation
 
+### Via pip (Python Package Index)
+
 ```bash
 pip install pypi-package-updater
 ```
@@ -29,6 +31,56 @@ Or install with development dependencies:
 
 ```bash
 pip install pypi-package-updater[dev]
+```
+
+### Via Homebrew (macOS/Linux)
+
+```bash
+# Add the tap and install (one-time setup)
+brew tap adambirds/homebrew-pypi-package-updater
+brew install pypi-package-updater
+
+# Or install directly without tapping
+brew install adambirds/homebrew-pypi-package-updater/pypi-package-updater
+```
+
+### Via APT (Debian/Ubuntu)
+
+```bash
+# Add the repository (one-time setup)
+curl -fsSL https://github.com/adambirds/pypi-package-updater/releases/download/latest/pubkey.gpg | sudo apt-key add -
+echo "deb https://github.com/adambirds/pypi-package-updater/releases/download/latest/deb ./" | sudo tee /etc/apt/sources.list.d/pypi-package-updater.list
+
+# Install the package
+sudo apt update
+sudo apt install pypi-package-updater
+```
+
+### Via Snap (Cross-platform Linux)
+
+```bash
+sudo snap install pypi-package-updater
+```
+
+### Via AppImage (Portable Linux)
+
+```bash
+# Download the AppImage
+wget https://github.com/adambirds/pypi-package-updater/releases/latest/download/pypi-package-updater-x86_64.AppImage
+
+# Make it executable
+chmod +x pypi-package-updater-x86_64.AppImage
+
+# Run it
+./pypi-package-updater-x86_64.AppImage --help
+```
+
+### From Source
+
+```bash
+git clone https://github.com/adambirds/pypi-package-updater.git
+cd pypi-package-updater
+pip install -e .
 ```
 
 ## Requirements
