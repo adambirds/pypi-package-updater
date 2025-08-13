@@ -269,14 +269,17 @@ jobs:
 
     - name: Upload Debian Package
       run: |
-        # Find the actual .deb file created
-        DEB_FILE=$(find . -name "*.deb" | head -1)
+        # Find the actual .deb file created by dpkg-buildpackage
+        # Look specifically for files matching our package name pattern
+        DEB_FILE=$(find . -maxdepth 2 -name "pypi-package-updater*.deb" | head -1)
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           # Use GitHub CLI to upload the asset
           gh release upload ${{ github.event.release.tag_name }} "$DEB_FILE" --clobber
         else
           echo "No .deb file found"
+          echo "Available .deb files:"
+          find . -name "*.deb" -ls
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
