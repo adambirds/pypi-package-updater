@@ -5,6 +5,10 @@
 
 set -e
 
+
+# Ensure setuptools_scm is available for version detection
+python3 -m pip install setuptools_scm
+
 APP="pypi-package-updater"
 VERSION="$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')"
 

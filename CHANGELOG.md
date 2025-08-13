@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.7] - 2025-08-13
+
+### 🛠️ Packaging
+- Fixed AppImage build script to install `setuptools_scm` before using it for version detection, preventing missing module errors in CI.
+
 ## [0.2.6] - 2025-08-13
 
 ### 🛠️ Packaging
