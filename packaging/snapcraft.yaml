@@ -1,7 +1,6 @@
 name: pypi-package-updater
 base: core22
-version: '0.0.0'  # Placeholder, override in CI/CD with:
-# snapcraft --version="$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')"
+version: git
 summary: Tool to update Python package dependencies
 description: |
   A Python package that automatically checks PyPI for new versions of your
@@ -31,6 +30,9 @@ parts:
     plugin: python
     source: .
     python-requirements:
-      - requirements/common.in
+      - requirements/common.txt
     stage-packages:
       - python3-pkg-resources
+    override-pull: |
+      craftctl default
+      craftctl set version="$(python3 -c 'import pypi_updater; print(pypi_updater.__version__)')"
