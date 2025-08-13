@@ -5,6 +5,7 @@
 ### 🔧 CI/CD
 - Fixed version generation for tag-based releases to prevent changelog conversion commits during tag builds.
 - Added conditional logic to skip changelog conversion when building from tags, ensuring proper version calculation.
+- Improved Debian build reliability by using dynamic tarball detection instead of wildcard patterns for sdist extraction.
 
 ## [0.2.11] - 2025-08-13
 

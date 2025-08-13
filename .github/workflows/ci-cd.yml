@@ -165,7 +165,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp python3-setuptools-scm python3-build
         python3 -m build --sdist
-        tar -xzf dist/*.tar.gz
+        # Extract the sdist - find the actual tar.gz file
+        TARBALL=$(find dist/ -name "*.tar.gz" | head -1)
+        tar -xzf "$TARBALL"
         cd pypi_package_updater-*
         cp -r ../packaging/debian .
         dpkg-buildpackage -us -uc
@@ -221,7 +223,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp python3-setuptools-scm python3-build
         python3 -m build --sdist
-        tar -xzf dist/*.tar.gz
+        # Extract the sdist - find the actual tar.gz file
+        TARBALL=$(find dist/ -name "*.tar.gz" | head -1)
+        tar -xzf "$TARBALL"
         cd pypi_package_updater-*
         cp -r ../packaging/debian .
         dpkg-buildpackage -us -uc
