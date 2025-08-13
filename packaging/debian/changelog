@@ -1,3 +1,12 @@
+pypi-package-updater (0.2.11-1) unstable; urgency=medium
+
+  * Added `.github/FUNDING.yml` for GitHub Sponsors support.
+  * CI now tests Debian and Snap builds after publishing to Test PyPI, catching packaging issues before release.
+  * Added `scripts/changelog_to_debian.py` to convert `CHANGELOG.md` to Debian changelog format.
+  * CI step now runs the changelog conversion script and commits the updated Debian changelog before building the Debian package.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  2025-08-13 00:00:00 +0000
+
 pypi-package-updater (0.2.10-1) unstable; urgency=medium
 
   * Fix missing comma in dependency setup.
