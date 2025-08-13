@@ -1,5 +1,8 @@
 [build-system]
-requires = ["setuptools>=45", "wheel"]
+requires = ["setuptools>=80", "setuptools-scm>=8", "wheel"]
+[project]
+name = "pypi-package-updater"
+dynamic = ["version"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
