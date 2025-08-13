@@ -1,14 +1,6 @@
 # Changelog
 
-## [0.2.8] - 2025-08-13
 
-### �️ CI/CD
-- Added FUSE installation step to CI workflow to fix AppImage build errors caused by missing `libfuse.so.2`.
-
-## [0.2.7] - 2025-08-13
-
-### 🛠️ Packaging
-- Fixed AppImage build script to install `setuptools_scm` before using it for version detection, preventing missing module errors in CI.
 
 ## [0.2.6] - 2025-08-13
 
@@ -29,11 +21,6 @@
 
 # Changelog
 
-## [0.2.3] - 2025-08-13
-
-### 🚀 Features
-- CI/CD workflow now builds Snap packages with dynamic versioning from setuptools_scm.
-- All package formats (PyPI, Debian, AppImage, Snap) now use the same automated version.
 
 ### 🛠️ Maintenance
 - Improved workflow automation and consistency for releases.

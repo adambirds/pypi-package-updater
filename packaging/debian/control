@@ -8,6 +8,7 @@ Build-Depends: debhelper-compat (= 13),
                python3-setuptools,
                python3-aiohttp,
                python3-packaging
+               python3-setuptools_scm
 Standards-Version: 4.6.0
 Homepage: https://github.com/adambirds/pypi-package-updater
 Vcs-Git: https://github.com/adambirds/pypi-package-updater.git

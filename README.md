@@ -63,18 +63,6 @@ sudo apt install pypi-package-updater
 sudo snap install pypi-package-updater
 ```
 
-### Via AppImage (Portable Linux)
-
-```bash
-# Download the AppImage
-wget https://github.com/adambirds/pypi-package-updater/releases/latest/download/pypi-package-updater-x86_64.AppImage
-
-# Make it executable
-chmod +x pypi-package-updater-x86_64.AppImage
-
-# Run it
-./pypi-package-updater-x86_64.AppImage --help
-```
 
 ### From Source
 
