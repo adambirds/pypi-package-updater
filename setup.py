@@ -61,7 +61,6 @@ long_description = readme_file.read_text(encoding="utf-8") if readme_file.exists
 
 setup(
     name="pypi-package-updater",  # Available PyPI name suggestion
-    use_scm_version=True,
     description="A tool to update Python package dependencies across multiple file formats",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -75,6 +74,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     python_requires=">=3.11",
+    setup_requires=["setuptools_scm"],
     install_requires=read_requirements("common.in"),
     extras_require={
         "dev": read_dev_requirements(),
