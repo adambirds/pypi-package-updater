@@ -1,5 +1,6 @@
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
+write_to = "pypi_updater/_version.py"
 [build-system]
 requires = ["setuptools>=80", "setuptools-scm>=8", "wheel"]
 build-backend = "setuptools.build_meta"
