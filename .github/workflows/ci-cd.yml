@@ -173,6 +173,10 @@ jobs:
         cp -r packaging/debian .
         dpkg-buildpackage -us -uc
         
+    - name: Install FUSE for AppImage
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fuse
     - name: Build AppImage
       run: |
         chmod +x packaging/appimage-build.sh

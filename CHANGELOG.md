@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.8] - 2025-08-13
+
+### �️ CI/CD
+- Added FUSE installation step to CI workflow to fix AppImage build errors caused by missing `libfuse.so.2`.
+
 ## [0.2.7] - 2025-08-13
 
 ### 🛠️ Packaging
