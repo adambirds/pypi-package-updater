@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4] - 2025-08-13
+
+### 🛠️ Maintenance
+- Setuptools_scm now uses `local_scheme = "no-local-version"` to remove `+` from dev version strings, improving PyPI/TestPyPI compatibility for non-tagged builds.
+
+# Changelog
+
 ## [0.2.3] - 2025-08-13
 
 ### 🚀 Features
