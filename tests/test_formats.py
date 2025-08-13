@@ -1,17 +1,13 @@
 """
 Tests for file format detection, parsing, and updating functionality.
 """
+
 import tempfile
 from pathlib import Path
 
 import pytest
 
-from pypi_updater.formats import (
-    FileFormat,
-    FormatDetector,
-    UniversalParser,
-    FileUpdater,
-)
+from pypi_updater.formats import FileFormat, FileUpdater, FormatDetector, UniversalParser
 
 
 class TestFormatDetection:
@@ -22,10 +18,10 @@ class TestFormatDetection:
         with tempfile.NamedTemporaryFile(suffix=".in", mode="w", delete=False) as f:
             f.write("requests>=2.25.0\n")
             f.flush()
-            
+
             format_detected = FormatDetector.detect_format(f.name)
             assert format_detected == FileFormat.REQUIREMENTS_IN
-            
+
             Path(f.name).unlink()
 
     def test_detect_requirements_txt(self):
@@ -33,10 +29,10 @@ class TestFormatDetection:
         with tempfile.NamedTemporaryFile(suffix=".txt", mode="w", delete=False) as f:
             f.write("requests>=2.25.0\n")
             f.flush()
-            
+
             format_detected = FormatDetector.detect_format(f.name)
             assert format_detected == FileFormat.REQUIREMENTS_TXT
-            
+
             Path(f.name).unlink()
 
     def test_detect_setup_py(self):
@@ -44,10 +40,10 @@ class TestFormatDetection:
         with tempfile.NamedTemporaryFile(suffix="setup.py", mode="w", delete=False) as f:
             f.write("from setuptools import setup\nsetup(install_requires=['requests>=2.25.0'])\n")
             f.flush()
-            
+
             format_detected = FormatDetector.detect_format(f.name)
             assert format_detected == FileFormat.SETUP_PY
-            
+
             Path(f.name).unlink()
 
     def test_detect_pyproject_toml(self):
@@ -55,10 +51,10 @@ class TestFormatDetection:
         with tempfile.NamedTemporaryFile(suffix="pyproject.toml", mode="w", delete=False) as f:
             f.write("[project]\ndependencies = ['requests>=2.25.0']\n")
             f.flush()
-            
+
             format_detected = FormatDetector.detect_format(f.name)
             assert format_detected == FileFormat.PYPROJECT_TOML
-            
+
             Path(f.name).unlink()
 
     def test_detect_by_content_setup_py(self):
@@ -69,7 +65,9 @@ class TestFormatDetection:
 
     def test_detect_by_content_pyproject_toml(self):
         """Test content-based detection for pyproject.toml."""
-        content = "[build-system]\nrequires = ['setuptools']\n[project]\ndependencies = ['requests']"
+        content = (
+            "[build-system]\nrequires = ['setuptools']\n[project]\ndependencies = ['requests']"
+        )
         format_detected = FormatDetector._detect_by_content(content)
         assert format_detected == FileFormat.PYPROJECT_TOML
 
@@ -82,7 +80,7 @@ class TestFormatDetection:
 
 class TestUniversalParser:
     """Test universal parser for different file formats."""
-    
+
     @pytest.fixture
     def parser(self):
         return UniversalParser()
@@ -91,7 +89,7 @@ class TestUniversalParser:
         """Test parsing requirements.in test data."""
         test_file = Path(__file__).parent.parent / "test_requirements_data" / "common.in"
         packages = parser.parse_file(test_file)
-        
+
         assert isinstance(packages, dict)
         assert "Django" in packages
         assert "psycopg2" in packages
@@ -100,7 +98,7 @@ class TestUniversalParser:
         """Test parsing requirements.txt test data."""
         test_file = Path(__file__).parent.parent / "test_requirements_data" / "requirements.txt"
         packages = parser.parse_file(test_file)
-        
+
         assert isinstance(packages, dict)
         assert "requests" in packages
         assert "click" in packages
@@ -111,7 +109,7 @@ class TestUniversalParser:
         """Test parsing setup.py test data."""
         test_file = Path(__file__).parent.parent / "test_requirements_data" / "setup.py"
         packages = parser.parse_file(test_file)
-        
+
         assert isinstance(packages, dict)
         assert "requests" in packages
         assert "click" in packages
@@ -122,7 +120,7 @@ class TestUniversalParser:
         """Test parsing pyproject.toml test data."""
         test_file = Path(__file__).parent.parent / "test_requirements_data" / "pyproject.toml"
         packages = parser.parse_file(test_file)
-        
+
         assert isinstance(packages, dict)
         assert "requests" in packages
         assert "click" in packages
@@ -131,9 +129,11 @@ class TestUniversalParser:
 
     def test_parse_test_data_poetry_toml(self, parser):
         """Test parsing Poetry pyproject.toml test data."""
-        test_file = Path(__file__).parent.parent / "test_requirements_data" / "pyproject-poetry.toml"
+        test_file = (
+            Path(__file__).parent.parent / "test_requirements_data" / "pyproject-poetry.toml"
+        )
         packages = parser.parse_file(test_file)
-        
+
         assert isinstance(packages, dict)
         assert "requests" in packages
         assert "click" in packages
@@ -146,14 +146,14 @@ class TestUniversalParser:
         """Test parsing with explicit format specification."""
         test_file = Path(__file__).parent.parent / "test_requirements_data" / "requirements.txt"
         packages = parser.parse_file(test_file, FileFormat.REQUIREMENTS_TXT)
-        
+
         assert isinstance(packages, dict)
         assert len(packages) > 0
 
     def test_parse_invalid_format(self, parser):
         """Test parsing with unsupported format."""
         test_file = Path(__file__).parent.parent / "test_requirements_data" / "requirements.txt"
-        
+
         with pytest.raises(ValueError, match="Unsupported file format"):
             parser.parse_file(test_file, FileFormat.UNKNOWN)
 
@@ -165,7 +165,7 @@ class TestUniversalParser:
 
 class TestFileUpdater:
     """Test file updating functionality."""
-    
+
     @pytest.fixture
     def updater(self):
         return FileUpdater()
@@ -177,23 +177,23 @@ class TestFileUpdater:
             f.write("requests==2.25.0\nclick==8.0.0\naiohttp>=3.8.0\n")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             # Update packages
             updates = {
                 "requests": "2.32.0",
                 "click": "8.2.1",
             }
-            
+
             result = updater.update_file(temp_path, updates, FileFormat.REQUIREMENTS_TXT)
             assert result is True
-            
+
             # Check the file was updated
             content = temp_path.read_text()
             assert "requests>=2.32.0" in content
             assert "click>=8.2.1" in content
             assert "aiohttp>=3.8.0" in content  # Unchanged
-            
+
         finally:
             temp_path.unlink()
 
@@ -204,85 +204,85 @@ class TestFileUpdater:
             f.write("requests>=2.25.0  # HTTP library\nclick>=8.0.0\n")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             # Update packages
             updates = {
                 "requests": "2.32.0",
                 "click": "8.2.1",
             }
-            
+
             result = updater.update_file(temp_path, updates)
             assert result is True
-            
+
             # Check the file was updated and comments preserved
             content = temp_path.read_text()
             assert "requests>=2.32.0  # HTTP library" in content
             assert "click>=8.2.1" in content
-            
+
         finally:
             temp_path.unlink()
 
     def test_update_setup_py_file(self, updater):
         """Test updating a setup.py file."""
-        setup_content = '''from setuptools import setup
+        setup_content = """from setuptools import setup
 setup(
     name="test",
     install_requires=[
         "requests>=2.25.0",
         "click>=8.0.0",
     ],
-)'''
-        
+)"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(setup_content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             updates = {
                 "requests": "2.32.0",
                 "click": "8.2.1",
             }
-            
+
             result = updater.update_file(temp_path, updates, FileFormat.SETUP_PY)
             assert result is True
-            
+
             # Check updates were applied
             content = temp_path.read_text()
             assert "requests>=2.32.0" in content
             assert "click>=8.2.1" in content
-            
+
         finally:
             temp_path.unlink()
 
     def test_update_pyproject_toml_file(self, updater):
         """Test updating a pyproject.toml file."""
-        toml_content = '''[project]
+        toml_content = """[project]
 dependencies = [
     "requests>=2.25.0",
     "click>=8.0.0",
-]'''
-        
+]"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(toml_content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             updates = {
                 "requests": "2.32.0",
                 "click": "8.2.1",
             }
-            
+
             result = updater.update_file(temp_path, updates, FileFormat.PYPROJECT_TOML)
             assert result is True
-            
+
             # Check updates were applied
             content = temp_path.read_text()
             assert "requests>=2.32.0" in content
             assert "click>=8.2.1" in content
-            
+
         finally:
             temp_path.unlink()
 
@@ -292,16 +292,16 @@ dependencies = [
             f.write("requests==2.25.0\nclick==8.0.0\n")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             # Try to update with packages not in the file
             updates = {
                 "nonexistent-package": "1.0.0",
             }
-            
+
             result = updater.update_file(temp_path, updates)
             assert result is False  # No changes made
-            
+
         finally:
             temp_path.unlink()
 
@@ -311,7 +311,7 @@ dependencies = [
             f.write("test content")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             with pytest.raises(ValueError, match="Unsupported file format for updates"):
                 updater.update_file(temp_path, {}, FileFormat.UNKNOWN)
@@ -321,23 +321,23 @@ dependencies = [
 
 class TestEndToEndFormatHandling:
     """Test end-to-end format handling with the main updater."""
-    
+
     def test_updater_with_different_formats(self):
         """Test that the main updater can handle different file formats."""
         from pypi_updater import PyPIUpdater
-        
+
         # Test with test data directory
         test_data_dir = Path(__file__).parent.parent / "test_requirements_data"
         updater = PyPIUpdater(
             str(test_data_dir),
             "tools",
             include_setup_py=True,
-            include_pyproject_toml=True
+            include_pyproject_toml=True,
         )
-        
+
         # Find files
         files = updater.find_requirements_files()
-        
+
         # Should find various file types
         file_names = [str(f) for f in files]
         assert any("setup.py" in name for name in file_names)
@@ -349,28 +349,28 @@ class TestEndToEndFormatHandling:
     async def test_check_updates_with_different_formats(self):
         """Test checking for updates across different file formats."""
         from pypi_updater import PyPIUpdater
-        
+
         test_data_dir = Path(__file__).parent.parent / "test_requirements_data"
         updater = PyPIUpdater(
             str(test_data_dir),
             "tools",
             include_setup_py=True,
-            include_pyproject_toml=True
+            include_pyproject_toml=True,
         )
-        
+
         # Get specific files of different formats
         files_to_check = [
             str(test_data_dir / "requirements.txt"),
             str(test_data_dir / "setup.py"),
             str(test_data_dir / "pyproject.toml"),
         ]
-        
+
         # This should work without errors
         update_info = await updater.check_for_updates(files_to_check)
-        
+
         assert isinstance(update_info, dict)
         assert len(update_info) == 3
-        
+
         # Each file should have been processed
         for file_path in files_to_check:
             assert file_path in update_info
@@ -378,7 +378,7 @@ class TestEndToEndFormatHandling:
 
 class TestFormatSpecificFeatures:
     """Test format-specific parsing features."""
-    
+
     @pytest.fixture
     def parser(self):
         return UniversalParser()
@@ -389,12 +389,12 @@ class TestFormatSpecificFeatures:
 # Comments
 requests>=2.25.0
 click>=8.0.0"""
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".in", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             packages = parser.parse_file(temp_path)
             assert "requests" in packages
@@ -406,19 +406,19 @@ click>=8.0.0"""
 
     def test_setup_py_with_extras(self, parser):
         """Test parsing setup.py with extras_require."""
-        content = '''from setuptools import setup
+        content = """from setuptools import setup
 setup(
     install_requires=["requests>=2.25.0"],
     extras_require={
         "dev": ["pytest>=7.0.0"],
     }
-)'''
-        
+)"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             packages = parser.parse_file(temp_path)
             # Should only get install_requires, not extras
@@ -436,12 +436,12 @@ click = {version = ">=8.0.0", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.0.0"'''
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             packages = parser.parse_file(temp_path)
             assert "requests" in packages

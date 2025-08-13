@@ -1,6 +1,7 @@
 """
 Tests for additional coverage of edge cases and error conditions.
 """
+
 import asyncio
 import tempfile
 from pathlib import Path
@@ -8,15 +9,10 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from pypi_updater.formats import (
-    FileFormat,
-    FormatDetector,
-    UniversalParser,
-    FileUpdater,
-)
+from pypi_updater import PyPIUpdater
+from pypi_updater.formats import FileFormat, FileUpdater, FormatDetector, UniversalParser
 from pypi_updater.parser import RequirementsParser
 from pypi_updater.pypi_client import PyPIClient
-from pypi_updater import PyPIUpdater
 
 
 class TestEdgeCases:
@@ -28,7 +24,7 @@ class TestEdgeCases:
             f.write("unknown content")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             format_detected = FormatDetector.detect_format(temp_path)
             # Unknown files default to REQUIREMENTS_TXT based on content
@@ -42,7 +38,7 @@ class TestEdgeCases:
             f.write("")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             format_detected = FormatDetector.detect_format(temp_path)
             assert format_detected == FileFormat.REQUIREMENTS_TXT
@@ -52,12 +48,12 @@ class TestEdgeCases:
     def test_universal_parser_malformed_setup_py(self):
         """Test parsing malformed setup.py file."""
         content = "invalid python syntax {"
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             packages = parser.parse_file(temp_path, FileFormat.SETUP_PY)
@@ -68,12 +64,12 @@ class TestEdgeCases:
     def test_universal_parser_malformed_pyproject_toml(self):
         """Test parsing malformed pyproject.toml file."""
         content = "[invalid toml"
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             with pytest.raises(ValueError, match="Failed to parse"):
@@ -83,17 +79,17 @@ class TestEdgeCases:
 
     def test_universal_parser_setup_py_no_install_requires(self):
         """Test parsing setup.py without install_requires."""
-        content = '''from setuptools import setup
+        content = """from setuptools import setup
 setup(
     name="test",
     version="1.0.0",
-)'''
-        
+)"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             packages = parser.parse_file(temp_path, FileFormat.SETUP_PY)
@@ -106,12 +102,12 @@ setup(
         content = '''[project]
 name = "test"
 version = "1.0.0"'''
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             packages = parser.parse_file(temp_path, FileFormat.PYPROJECT_TOML)
@@ -122,12 +118,12 @@ version = "1.0.0"'''
     def test_file_updater_malformed_setup_py(self):
         """Test updating malformed setup.py file."""
         content = "invalid python syntax {"
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             updater = FileUpdater()
             # Should handle malformed files gracefully
@@ -143,15 +139,17 @@ version = "1.0.0"'''
     def test_file_updater_malformed_pyproject_toml(self):
         """Test updating malformed pyproject.toml file."""
         content = "[invalid toml"
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             updater = FileUpdater()
-            result = updater.update_file(temp_path, {"requests": "2.32.0"}, FileFormat.PYPROJECT_TOML)
+            result = updater.update_file(
+                temp_path, {"requests": "2.32.0"}, FileFormat.PYPROJECT_TOML
+            )
             assert result is False
         finally:
             temp_path.unlink()
@@ -162,7 +160,7 @@ version = "1.0.0"'''
             f.write("invalid-line-without-version\n# just a comment\n")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = RequirementsParser()
             requirements = parser.parse_file(str(temp_path))
@@ -177,7 +175,7 @@ version = "1.0.0"'''
             f.write("-e .\n-e git+https://github.com/user/repo.git\n")
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = RequirementsParser()
             requirements = parser.parse_file(str(temp_path))
@@ -189,10 +187,12 @@ version = "1.0.0"'''
     def test_requirements_parser_url_requirement(self):
         """Test parsing URL-based requirements."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".in", delete=False) as f:
-            f.write("git+https://github.com/user/repo.git\nhttps://files.pythonhosted.org/packages/package.tar.gz\n")
+            f.write(
+                "git+https://github.com/user/repo.git\nhttps://files.pythonhosted.org/packages/package.tar.gz\n"
+            )
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = RequirementsParser()
             requirements = parser.parse_file(str(temp_path))
@@ -205,13 +205,13 @@ version = "1.0.0"'''
     async def test_pypi_client_network_error(self):
         """Test PyPI client network error handling."""
         client = PyPIClient()
-        
-        with patch('aiohttp.ClientSession.get') as mock_get:
+
+        with patch("aiohttp.ClientSession.get") as mock_get:
             mock_response = AsyncMock()
             mock_response.status = 500
             mock_response.json.side_effect = Exception("Network error")
             mock_get.return_value.__aenter__.return_value = mock_response
-            
+
             result = await client.get_package_info("requests")
             assert result is None
 
@@ -219,13 +219,13 @@ version = "1.0.0"'''
     async def test_pypi_client_invalid_json(self):
         """Test PyPI client with invalid JSON response."""
         client = PyPIClient()
-        
-        with patch('aiohttp.ClientSession.get') as mock_get:
+
+        with patch("aiohttp.ClientSession.get") as mock_get:
             mock_response = AsyncMock()
             mock_response.status = 200
             mock_response.json.side_effect = Exception("Invalid JSON")
             mock_get.return_value.__aenter__.return_value = mock_response
-            
+
             result = await client.get_package_info("requests")
             assert result is None
 
@@ -233,7 +233,7 @@ version = "1.0.0"'''
     async def test_pypi_updater_error_handling(self):
         """Test PyPI updater error handling."""
         updater = PyPIUpdater("nonexistent", "tools")
-        
+
         # Test with nonexistent files
         result = await updater.check_for_updates(["/nonexistent/file.txt"])
         assert isinstance(result, dict)
@@ -244,7 +244,7 @@ version = "1.0.0"'''
         """Test dry run with no files found."""
         with tempfile.TemporaryDirectory() as temp_dir:
             updater = PyPIUpdater(temp_dir, "tools")
-            
+
             # Should not crash with empty directory
             files = updater.find_requirements_files()
             assert files == []
@@ -256,12 +256,12 @@ version = "1.0.0"'''
             # Create a requirements file
             req_file = Path(temp_dir) / "requirements.txt"
             req_file.write_text("requests==2.32.3  # Already latest\n")
-            
+
             updater = PyPIUpdater(temp_dir, "tools")
-            
+
             # Don't mock - just verify the test doesn't crash
             result = await updater.check_for_updates([str(req_file)])
-            
+
             # Should find the file
             assert str(req_file) in result
             assert isinstance(result[str(req_file)], list)
@@ -275,20 +275,20 @@ class TestComplexScenarios:
         # Test various complex specifiers in actual files
         test_cases = [
             "package>=1.0,<2.0",
-            "package~=1.4.2", 
+            "package~=1.4.2",
             "package==1.4.*",
             "package>=1.0,!=1.3,<2.0",
             "package[extra]>=1.0",
             "package[extra1,extra2]>=1.0",
         ]
-        
+
         content = "\n".join(test_cases)
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             packages = parser.parse_file(temp_path, FileFormat.REQUIREMENTS_TXT)
@@ -298,7 +298,7 @@ class TestComplexScenarios:
 
     def test_pyproject_toml_with_complex_dependencies(self):
         """Test parsing pyproject.toml with complex dependency specifications."""
-        content = '''[project]
+        content = """[project]
 dependencies = [
     "requests >= 2.25.0, < 3.0",
     "click ~= 8.0.0",
@@ -310,17 +310,17 @@ dependencies = [
 dev = [
     "pytest >= 7.0.0",
     "black",
-]'''
-        
+]"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             packages = parser.parse_file(temp_path, FileFormat.PYPROJECT_TOML)
-            
+
             assert "requests" in packages
             assert "click" in packages
             assert "aiohttp" in packages
@@ -332,7 +332,7 @@ dev = [
 
     def test_setup_py_with_complex_install_requires(self):
         """Test parsing setup.py with complex install_requires."""
-        content = '''from setuptools import setup
+        content = """from setuptools import setup
 
 setup(
     name="test-package",
@@ -345,17 +345,17 @@ setup(
         "dev": ["pytest>=7.0.0"],
         "docs": ["sphinx"],
     }
-)'''
-        
+)"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(content)
             f.flush()
             temp_path = Path(f.name)
-        
+
         try:
             parser = UniversalParser()
             packages = parser.parse_file(temp_path, FileFormat.SETUP_PY)
-            
+
             # The parser should extract basic dependencies
             assert isinstance(packages, dict)
             # May or may not find dependencies depending on the parser complexity
