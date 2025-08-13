@@ -1,4 +1,4 @@
-pypi-package-updater (0.2.12-1) unstable; urgency=medium
+pypi-package-updater (0.2.13-1) unstable; urgency=medium
 
   * Fixed version generation for tag-based releases to prevent changelog conversion commits during tag builds.
   * Added conditional logic to skip changelog conversion when building from tags, ensuring proper version calculation.
