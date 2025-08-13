@@ -8,10 +8,18 @@ pypi-package-updater (0.2.11-1) unstable; urgency=medium
   * Added proper checkout steps to CI jobs that need repository access.
   * Improved snap build by installing snapcraft in CI environment.
   * Fixed debian changelog formatting to use proper RFC 2822 date format.
+  * Fixed Debian build directory pattern to use underscores (`pypi_package_updater-*`) matching actual sdist extraction.
+  * Added proper snapd setup in CI with core24 base installation for reliable snap builds.
+  * Fixed step labels to correctly distinguish between test and production builds.
   * Refactored version management to use setuptools_scm `write_to` feature for consistent versioning across all packaging formats.
   * Updated debian packaging to build from sdist with embedded version information.
   * Simplified snapcraft versioning to use `craftctl` and package version dynamically.
   * Added dummy `_version.py` for development fallback when setuptools_scm hasn't run.
+  * Moved `snapcraft.yaml` to project root for better source access and conventional structure.
+  * Upgraded snap base from core22 to core24 for better Python 3.12+ support and modern Ubuntu 24.04 LTS foundation.
+  * Updated snapcraft to use `adopt-info` with setuptools_scm for consistent version formatting across all package types.
+  * Pinned all dependency versions for reproducible builds and better stability.
+  * Added setuptools_scm to development dependencies for local version management.
   * Added VSCode configuration to ignore debian packaging file errors.
 
  -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Wed, 13 Aug 2025 00:00:00 +0000
