@@ -1,6 +1,6 @@
 name: pypi-package-updater
 base: core24
-version: git
+adopt-info: pypi-package-updater
 summary: Tool to update Python package dependencies
 description: |
   A Python package that automatically checks PyPI for new versions of your
@@ -33,3 +33,9 @@ parts:
       - requirements/common.txt
     stage-packages:
       - python3-pkg-resources
+    override-pull: |
+      craftctl default
+      # Install setuptools_scm to get version
+      python3 -m pip install setuptools_scm
+      VERSION=$(python3 -c "import setuptools_scm; print(setuptools_scm.get_version())")
+      craftctl set version="$VERSION"
