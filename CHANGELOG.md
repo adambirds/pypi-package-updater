@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.10] - 2025-08-13
+
+### Build - 2025-08-13
+- Fix missing comma in dependency setup.
+
 ## [0.2.9] - 2025-08-13
 
 ### Build
