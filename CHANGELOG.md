@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5] - 2025-08-13
+
+### 🏗️ Packaging
+- Removed `debian/compat` file to follow Debian packaging best practices and avoid debhelper compat level conflicts.
+
+# Changelog
+
 ## [0.2.4] - 2025-08-13
 
 ### 🛠️ Maintenance
