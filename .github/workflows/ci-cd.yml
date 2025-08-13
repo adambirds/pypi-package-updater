@@ -206,6 +206,10 @@ jobs:
         name: dist-artifacts
         path: dist/
         
+    - name: Install setuptools_scm for version detection
+      run: |
+        python3 -m pip install setuptools_scm
+        
     - name: Debug git and version state
       run: |
         echo "Git ref: ${{ github.ref }}"
