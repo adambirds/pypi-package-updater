@@ -9,6 +9,19 @@
 - CI now tests Debian and Snap builds after publishing to Test PyPI, catching packaging issues before release.
 - Added `scripts/changelog_to_debian.py` to convert `CHANGELOG.md` to Debian changelog format.
 - CI step now runs the changelog conversion script and commits the updated Debian changelog before building the Debian package.
+- Fixed permissions for automated commits by adding `contents: write` to CI jobs.
+- Added proper checkout steps to CI jobs that need repository access.
+- Improved snap build by installing snapcraft in CI environment.
+- Fixed debian changelog formatting to use proper RFC 2822 date format.
+
+### 🏗️ Build System
+- Refactored version management to use setuptools_scm `write_to` feature for consistent versioning across all packaging formats.
+- Updated debian packaging to build from sdist with embedded version information.
+- Simplified snapcraft versioning to use `craftctl` and package version dynamically.
+- Added dummy `_version.py` for development fallback when setuptools_scm hasn't run.
+
+### 🔧 Configuration
+- Added VSCode configuration to ignore debian packaging file errors.
 
 ## [0.2.10] - 2025-08-13
 
