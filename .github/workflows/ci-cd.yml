@@ -143,6 +143,8 @@ jobs:
 
     - name: Convert CHANGELOG.md to Debian changelog
       run: |
+        pwd
+        ls -la .
         python3 scripts/changelog_to_debian.py
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
@@ -186,6 +188,15 @@ jobs:
         
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+    
+    - name: Convert CHANGELOG.md to Debian changelog
+      run: |
+        python3 scripts/changelog_to_debian.py
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git add packaging/debian/changelog
+        git commit -m "ci: update debian changelog from CHANGELOG.md" || echo "No changes to commit"
+        git push
         
     - name: Build Debian Package
       run: |
