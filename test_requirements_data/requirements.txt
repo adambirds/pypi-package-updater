@@ -1,0 +1,9 @@
+# Simple requirements.txt file for testing
+requests==2.25.0
+click==8.0.0  # CLI library
+aiohttp>=3.8.0
+packaging>=21.0
+
+# Development dependencies (commented out)
+# pytest>=7.0.0
+# black>=22.0.0
