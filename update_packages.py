@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from pypi_updater import PyPIUpdater
+from pypi_updater.formats import FileFormat
 
 
 async def main():
@@ -64,6 +65,25 @@ async def main():
         help="Enable verbose logging"
     )
     
+    parser.add_argument(
+        "--format",
+        choices=["auto", "requirements.in", "requirements.txt", "setup.py", "pyproject.toml"],
+        default="auto",
+        help="Force a specific file format (default: auto-detect)"
+    )
+    
+    parser.add_argument(
+        "--include-setup-py",
+        action="store_true",
+        help="Include setup.py files when auto-discovering files"
+    )
+    
+    parser.add_argument(
+        "--include-pyproject-toml",
+        action="store_true", 
+        help="Include pyproject.toml files when auto-discovering files"
+    )
+    
     args = parser.parse_args()
     
     # Set up logging level
@@ -72,9 +92,22 @@ async def main():
         logging.getLogger().setLevel(logging.DEBUG)
     
     # Initialize updater
+    format_override = None
+    if args.format != "auto":
+        format_map = {
+            "requirements.in": FileFormat.REQUIREMENTS_IN,
+            "requirements.txt": FileFormat.REQUIREMENTS_TXT,
+            "setup.py": FileFormat.SETUP_PY,
+            "pyproject.toml": FileFormat.PYPROJECT_TOML
+        }
+        format_override = format_map[args.format]
+    
     updater = PyPIUpdater(
         requirements_dir=args.requirements_dir,
-        tools_dir=args.tools_dir
+        tools_dir=args.tools_dir,
+        include_setup_py=args.include_setup_py,
+        include_pyproject_toml=args.include_pyproject_toml,
+        format_override=format_override
     )
     
     try:
