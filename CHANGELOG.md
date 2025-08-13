@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2] - 2025-08-13
+
+### 🛠️ Fixes
+- CI/CD workflow now always fetches tags for all jobs, ensuring setuptools_scm correctly detects the version from Git tags in all build and publish steps.
+
+# Changelog
+
 ## [0.2.1] - 2025-08-13
 
 ### 🛠️ Improvements
