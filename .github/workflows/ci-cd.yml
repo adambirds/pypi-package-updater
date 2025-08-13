@@ -162,8 +162,11 @@ jobs:
     - name: Build Debian Package (Test)
       run: |
         sudo apt-get update
-        sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp
-        cp -r packaging/debian .
+        sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp python3-setuptools-scm
+        python3 -m build --sdist
+        tar -xzf dist/*.tar.gz
+        cd pypi-package-updater-*
+        cp -r ../packaging/debian .
         dpkg-buildpackage -us -uc
 
     - name: Build Snap Package (Test)
