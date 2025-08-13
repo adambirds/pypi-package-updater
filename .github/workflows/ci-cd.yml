@@ -141,6 +141,18 @@ jobs:
         repository-url: https://test.pypi.org/legacy/
         skip-existing: true
 
+    - name: Build Debian Package (Test)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp
+        cp -r packaging/debian .
+        dpkg-buildpackage -us -uc
+
+    - name: Build Snap Package (Test)
+      run: |
+        VERSION=$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')
+        snapcraft --version="$VERSION"
+
   publish-pypi:
     name: Publish to PyPI and Package Managers
     runs-on: ubuntu-latest
