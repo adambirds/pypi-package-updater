@@ -10,6 +10,9 @@ on:
   create:
     tags:
       - v*
+  release:
+    types:
+      - published
 
 jobs:
   test:
