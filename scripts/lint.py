@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Linting and formatting script for the python-package-updater project.
+Linting and formatting script for the pypi-package-updater project.
 
 This script runs all linting and formatting tools in a consistent manner.
 It can be used both in CI and locally with optional auto-fixing.

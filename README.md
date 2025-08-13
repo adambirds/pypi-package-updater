@@ -1,7 +1,7 @@
-# PyPI Updater
+# PyPI Package Updater
 
-[![CI/CD](https://github.com/your-username/python-package-updater/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/your-username/python-package-updater/actions/workflows/ci-cd.yml)
-[![codecov](https://codecov.io/gh/your-username/python-package-updater/graph/badge.svg)](https://codecov.io/gh/your-username/python-package-updater)
+[![CI/CD](https://github.com/adambirds/pypi-package-updater/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/adambirds/pypi-package-updater/actions/workflows/ci-cd.yml)
+[![codecov](https://codecov.io/gh/adambirds/pypi-package-updater/graph/badge.svg)](https://codecov.io/gh/adambirds/pypi-package-updater)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -22,13 +22,13 @@ A Python package that automatically checks PyPI for new versions of your depende
 ## Installation
 
 ```bash
-pip install -e .
+pip install pypi-package-updater
 ```
 
 Or install with development dependencies:
 
 ```bash
-pip install -e ".[dev]"
+pip install pypi-package-updater[dev]
 ```
 
 ## Requirements
@@ -45,37 +45,37 @@ pip install -e ".[dev]"
 #### Check for available updates (without making changes):
 
 ```bash
-python update_packages.py --check-only
+pypi-update --check-only
 ```
 
 #### Update all packages interactively:
 
 ```bash
-python update_packages.py
+pypi-update
 ```
 
 #### Update specific files:
 
 ```bash
-python update_packages.py requirements/common.in requirements/dev.in
+pypi-update requirements/common.in requirements/dev.in
 ```
 
 #### Dry run (see what would be updated):
 
 ```bash
-python update_packages.py --dry-run
+pypi-update --dry-run
 ```
 
 #### Non-interactive mode (update everything automatically):
 
 ```bash
-python update_packages.py --non-interactive
+pypi-update --non-interactive
 ```
 
 #### Skip compilation after updates:
 
 ```bash
-python update_packages.py --no-compile
+pypi-update --no-compile
 ```
 
 ### Python API
@@ -240,7 +240,7 @@ Update Django from 4.1.0 to 4.2.0? [y/N/q]:
 Use `--dry-run` to see what would be updated without making any changes:
 
 ```bash
-python update_packages.py --dry-run
+pypi-update --dry-run
 ```
 
 This is useful for:
@@ -263,8 +263,8 @@ The tool handles various error conditions gracefully:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd python-package-updater
+git clone https://github.com/adambirds/pypi-package-updater.git
+cd pypi-package-updater
 
 # Create virtual environment
 python -m venv .venv
@@ -342,7 +342,7 @@ To enable full CI/CD functionality, configure these repository secrets:
 
 1. **`CODECOV_TOKEN`** - For coverage reporting
    ```bash
-   # Get from https://codecov.io/gh/your-username/python-package-updater
+   # Get from https://codecov.io/gh/adambirds/pypi-package-updater
    # Add to GitHub repo settings → Secrets and variables → Actions
    ```
 
