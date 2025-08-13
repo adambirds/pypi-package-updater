@@ -163,7 +163,7 @@ jobs:
     - name: Build Debian Package
       run: |
         sudo apt-get update
-        sudo apt-get install -y devscripts build-essential dh-python
+        sudo apt-get install -y devscripts build-essential dh-python debhelper-compat python3-all python3-aiohttp
         cp -r packaging/debian .
         dpkg-buildpackage -us -uc
         
