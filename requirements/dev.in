@@ -1,0 +1,13 @@
+# Development dependencies
+-r test.in
+
+# Code formatting and linting
+black>=22.0
+isort>=5.0
+flake8>=4.0
+
+# Type checking
+mypy>=0.900
+
+# Build and dependency management tools
+pip-tools>=7.0

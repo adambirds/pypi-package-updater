@@ -1,0 +1,3 @@
+# Core runtime dependencies for PyPI Updater
+aiohttp>=3.8.0
+packaging>=21.0

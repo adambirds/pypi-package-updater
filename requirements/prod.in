@@ -1,0 +1,2 @@
+# Production dependencies (same as common for this project)
+-r common.in
