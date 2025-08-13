@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.14] - 2025-08-13
+
+### 🔧 CI/CD
+- Fixed version generation for release builds by making publish job independent from build artifacts.
+- Removed build job dependency from release publishing to ensure fresh package builds from tags.
+- Added condition to exclude release events from the build job, preventing version conflicts.
+- Release job now builds packages directly from the tag checkout instead of using development artifacts.
+- Enhanced debug logging to track git state and setuptools_scm version detection during releases.
+
 ## [0.2.13] - 2025-08-13
 
 ### 🔧 CI/CD
