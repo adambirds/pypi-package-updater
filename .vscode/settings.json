@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "**/debian/control": "plaintext",
+        "**/debian/copyright": "plaintext",
+        "**/debian/changelog": "plaintext",
+        "**/debian/rules": "makefile",
+    },
+    "[plaintext]": {
+        "editor.wordWrap": "on"
+    }
+}
