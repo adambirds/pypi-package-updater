@@ -1,0 +1,50 @@
+name: Update Homebrew Tap
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-homebrew-tap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout homebrew tap repository
+        uses: actions/checkout@v4
+        with:
+          repository: adambirds/homebrew-pypi-package-updater
+          token: ${{ secrets.PAT_TOKEN }}
+          path: homebrew-tap
+          
+      - name: Update Homebrew Formula
+        run: |
+          # Download the release tarball to calculate SHA256
+          curl -L -o release.tar.gz "https://github.com/adambirds/pypi-package-updater/archive/refs/tags/${{ github.ref_name }}.tar.gz"
+          
+          # Calculate SHA256
+          SHA256=$(sha256sum release.tar.gz | cut -d' ' -f1)
+          echo "Calculated SHA256: $SHA256"
+          
+          # Remove 'v' prefix from tag for version
+          VERSION=${{ github.ref_name }}
+          VERSION=${VERSION#v}
+          
+          # Update the formula file
+          sed -i "s|url \".*\"|url \"https://github.com/adambirds/pypi-package-updater/archive/refs/tags/${{ github.ref_name }}.tar.gz\"|g" homebrew-tap/Formula/pypi-package-updater.rb
+          sed -i "s|sha256 \".*\"|sha256 \"$SHA256\"|g" homebrew-tap/Formula/pypi-package-updater.rb
+          sed -i "s|version \".*\"|version \"$VERSION\"|g" homebrew-tap/Formula/pypi-package-updater.rb
+          
+          # Clean up
+          rm release.tar.gz
+          
+      - name: Commit and Push Formula Updates
+        run: |
+          cd homebrew-tap
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Formula/pypi-package-updater.rb
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Homebrew formula to ${{ github.ref_name }}"
+            git push
+          fi
