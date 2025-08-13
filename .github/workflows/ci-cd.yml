@@ -127,6 +127,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:
       id-token: write
+      contents: write
       
     steps:
     - name: Checkout code
@@ -156,7 +157,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git add packaging/debian/changelog
         git commit -m "ci: update debian changelog from CHANGELOG.md" || echo "No changes to commit"
-        git push
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
 
     - name: Build Debian Package (Test)
       run: |
@@ -202,7 +203,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git add packaging/debian/changelog
         git commit -m "ci: update debian changelog from CHANGELOG.md" || echo "No changes to commit"
-        git push
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
         
     - name: Build Debian Package
       run: |
