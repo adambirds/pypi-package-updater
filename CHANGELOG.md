@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.3] - 2025-08-13
+
+### 🚀 Features
+- CI/CD workflow now builds Snap packages with dynamic versioning from setuptools_scm.
+- All package formats (PyPI, Debian, AppImage, Snap) now use the same automated version.
+
+### 🛠️ Maintenance
+- Improved workflow automation and consistency for releases.
+
+# Changelog
+
 ## [0.2.2] - 2025-08-13
 
 ### 🛠️ Fixes
