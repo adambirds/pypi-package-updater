@@ -134,14 +134,20 @@ jobs:
         skip-existing: true
 
   publish-pypi:
-    name: Publish to PyPI
+    name: Publish to PyPI and Package Managers
     runs-on: ubuntu-latest
     needs: [test, lint, build]
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'release' && github.event.action == 'published'
     permissions:
       id-token: write
+      contents: write
       
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
@@ -150,3 +156,27 @@ jobs:
         
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        
+    - name: Build Debian Package
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y devscripts build-essential dh-python
+        cp -r packaging/debian .
+        dpkg-buildpackage -us -uc
+        
+    - name: Build AppImage
+      run: |
+        chmod +x packaging/appimage-build.sh
+        ./packaging/appimage-build.sh
+        
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./pypi-package-updater-0.2.0-x86_64.AppImage
+        asset_name: pypi-package-updater-${{ github.event.release.tag_name }}-x86_64.AppImage
+        asset_content_type: application/octet-stream
