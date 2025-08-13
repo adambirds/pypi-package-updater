@@ -1,9 +1,10 @@
 # PyPI Package Updater
 
 [![CI/CD](https://github.com/adambirds/pypi-package-updater/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/adambirds/pypi-package-updater/actions/workflows/ci-cd.yml)
-[![codecov](https://codecov.io/gh/adambirds/pypi-package-updater/graph/badge.svg)](https://codecov.io/gh/adambirds/pypi-package-updater)
+[![codecov](https://codecov.io/gh/adambirds/pypi-package-updater/graph/badge.svg?token=GGMWD1CIUC)](https://codecov.io/gh/adambirds/pypi-package-updater)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Mypy coverage](https://img.shields.io/badge/mypy-100%25-green.svg)](https://mypy-lang.org/)
 
 A Python package that automatically checks PyPI for new versions of your dependencies and updates your requirements files with comprehensive format support.
 
