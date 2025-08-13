@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.12] - 2025-08-13
+
+### 🔧 CI/CD
+- Fixed version generation for tag-based releases to prevent changelog conversion commits during tag builds.
+- Added conditional logic to skip changelog conversion when building from tags, ensuring proper version calculation.
+
 ## [0.2.11] - 2025-08-13
 
 ### 🚀 Features

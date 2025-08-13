@@ -149,6 +149,7 @@ jobs:
         skip-existing: true
 
     - name: Convert CHANGELOG.md to Debian changelog
+      if: github.ref_type != 'tag'
       run: |
         pwd
         ls -la .
@@ -206,6 +207,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
     
     - name: Convert CHANGELOG.md to Debian changelog
+      if: github.ref_type != 'tag'
       run: |
         python3 scripts/changelog_to_debian.py
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
