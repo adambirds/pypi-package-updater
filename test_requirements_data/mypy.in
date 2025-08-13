@@ -1,0 +1,12 @@
+# After editing this file, you MUST afterward run
+# /tools/update-locked-requirements to update requirements/dev.txt
+# and requirements/mypy.txt.
+# See requirements/README.md for more detail.
+mypy==1.16.0
+
+types-psycopg2==2.9.21.20250516
+types-requests==2.32.4.20250611
+
+django-stubs==5.2.0
+
+types-Pillow==10.2.0.20240822

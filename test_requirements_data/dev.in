@@ -1,0 +1,37 @@
+# After editing this file, you MUST afterward run
+# /tools/update-locked-requirements to update requirements/dev.txt.
+# See requirements/README.md for more detail.
+-r pip.in
+-r prod.in
+-r mypy.in
+
+# For sorting imports
+isort==6.0.1
+
+# for pep8 linter
+pycodestyle==2.13.0
+
+# Python reformatter
+black==25.1.0
+
+# Needed to run pyflakes linter
+pyflakes==3.3.2
+
+# For linting Git commit messages
+gitlint-core==0.19.1
+
+# Needed for updating the locked pip dependencies
+pip-tools==7.4.1
+
+# Linting framework
+adamlint==1.0.0
+
+# For spell check linter
+codespell==2.4.1
+
+# For code coverage
+
+coverage==7.9.0
+django-coverage-plugin==3.1.0
+
+flake8==7.2.0

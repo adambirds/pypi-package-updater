@@ -1,0 +1,36 @@
+# Core Dependencies
+
+Django==5.2.3
+django-ninja==1.4.3
+Markdown==3.8
+uvicorn[standard]==0.34.3
+whitenoise==6.9.0
+psycopg2==2.9.10
+Pillow==11.2.1
+python-dotenv==1.1.0
+django-cors-headers==4.7.0
+django-debug-toolbar==5.2.0
+django-unfold==0.59.0
+spacy==3.8.7
+spacytextblob==5.0.0
+
+# Celery / Cache Dependencies
+
+celery==5.5.3
+redis==6.2.0
+flower==2.0.1
+django-redis==5.4.0
+
+# Other Dependencies
+tzdata==2025.2
+typing_extensions==4.14.0
+requests==2.32.4
+cryptography==45.0.4
+async-timeout==5.0.1
+sqlparse==0.5.3
+tornado==6.5.1
+idna==3.10
+certifi==2025.4.26
+urllib3==2.4.0
+tomli==2.2.1
+exceptiongroup==1.3.0
