@@ -6,7 +6,7 @@
 set -e
 
 APP="pypi-package-updater"
-VERSION="0.2.0"
+VERSION="$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')"
 
 # Create AppDir structure
 mkdir -p ${APP}.AppDir/usr/bin

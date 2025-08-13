@@ -177,7 +177,12 @@ jobs:
       run: |
         chmod +x packaging/appimage-build.sh
         ./packaging/appimage-build.sh
-        
+
+    - name: Build Snap package with dynamic version
+      run: |
+        VERSION=$(python3 -c 'import setuptools_scm; print(setuptools_scm.get_version())')
+        snapcraft --version="$VERSION"
+
     - name: Upload Release Assets
       uses: actions/upload-release-asset@v1
       env:
