@@ -31,11 +31,6 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: true
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        fetch-tags: true
         
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -65,11 +60,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        fetch-tags: true
     - name: Checkout code
       uses: actions/checkout@v4
       with:
@@ -139,6 +129,12 @@ jobs:
       id-token: write
       
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        fetch-tags: true
+
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
