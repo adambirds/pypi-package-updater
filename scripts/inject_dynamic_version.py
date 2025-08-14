@@ -15,8 +15,17 @@ def inject_version():
     
     # Get the current setuptools_scm version
     try:
-        version = get_version()
-        print(f"Got setuptools_scm version: {version}")
+        raw_version = get_version()
+        print(f"Got setuptools_scm version: {raw_version}")
+        
+        # Clean up the version by removing git hash and date parts
+        # Convert "0.2.16.dev7+g50de744.d20250814" to "0.2.16.dev7"
+        if '+' in raw_version:
+            version = raw_version.split('+')[0]
+            print(f"Cleaned version: {version}")
+        else:
+            version = raw_version
+            
     except Exception as e:
         print(f"Error getting version: {e}")
         sys.exit(1)
