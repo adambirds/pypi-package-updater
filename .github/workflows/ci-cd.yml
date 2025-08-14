@@ -184,19 +184,29 @@ jobs:
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           
-          # Download upload script
-          curl -O https://raw.githubusercontent.com/AdamBirds/adb-apt-repo/main/scripts/upload-to-apt-repo.sh
-          chmod +x upload-to-apt-repo.sh
+          # Clone the APT repository
+          git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
+          cd apt-repo
           
-          # Upload to testing distribution
-          ./upload-to-apt-repo.sh "$DEB_FILE" testing main
+          # Set up git config
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          
+          # Copy the package to testing/main directory
+          cp "../$DEB_FILE" incoming/testing/main/
+          
+          # Commit and push
+          git add incoming/testing/main/
+          PACKAGE_NAME=$(basename "$DEB_FILE")
+          git commit -m "feat: Add testing/main package $PACKAGE_NAME."
+          git push
+          
+          echo "✅ Package $PACKAGE_NAME uploaded to APT repository (testing/main)"
         else
-          echo "No .deb file found"
+          echo "❌ No .deb file found"
           echo "Available .deb files:"
           find .. -name "*.deb" -ls
         fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.APT_REPO_TOKEN }}
 
     - name: Build Snap Package (Test)
       run: |
@@ -292,19 +302,29 @@ jobs:
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           
-          # Download upload script
-          curl -O https://raw.githubusercontent.com/AdamBirds/adb-apt-repo/main/scripts/upload-to-apt-repo.sh
-          chmod +x upload-to-apt-repo.sh
+          # Clone the APT repository
+          git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
+          cd apt-repo
           
-          # Upload to stable distribution for releases
-          ./upload-to-apt-repo.sh "$DEB_FILE" stable main
+          # Set up git config
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          
+          # Copy the package to stable/main directory
+          cp "../$DEB_FILE" incoming/stable/main/
+          
+          # Commit and push
+          git add incoming/stable/main/
+          PACKAGE_NAME=$(basename "$DEB_FILE")
+          git commit -m "feat: Add stable/main package $PACKAGE_NAME."
+          git push
+          
+          echo "✅ Package $PACKAGE_NAME uploaded to APT repository (stable/main)"
         else
-          echo "No .deb file found"
+          echo "❌ No .deb file found"
           echo "Available .deb files:"
           find .. -name "*.deb" -ls
         fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.APT_REPO_TOKEN }}
 
     - name: Build Snap package with dynamic version
       run: |
