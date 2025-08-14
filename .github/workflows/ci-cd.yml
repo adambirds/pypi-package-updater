@@ -297,3 +297,31 @@ jobs:
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Python Wheel
+      run: |
+        # Find the actual .whl file created
+        WHL_FILE=$(find dist/ -name "*.whl" | head -1)
+        if [ -n "$WHL_FILE" ]; then
+          echo "Found Python wheel: $WHL_FILE"
+          # Use GitHub CLI to upload the asset
+          gh release upload ${{ github.event.release.tag_name }} "$WHL_FILE" --clobber
+        else
+          echo "No .whl file found"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Python Source Distribution
+      run: |
+        # Find the actual .tar.gz file created
+        SDIST_FILE=$(find dist/ -name "*.tar.gz" | head -1)
+        if [ -n "$SDIST_FILE" ]; then
+          echo "Found Python sdist: $SDIST_FILE"
+          # Use GitHub CLI to upload the asset
+          gh release upload ${{ github.event.release.tag_name }} "$SDIST_FILE" --clobber
+        else
+          echo "No .tar.gz file found"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

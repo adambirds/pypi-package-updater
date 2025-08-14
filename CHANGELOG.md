@@ -6,6 +6,7 @@
 - Fixed Debian package detection in CI to avoid uploading system packages like `python3-pkg-resources`.
 - Updated package search to use specific pattern `pypi-package-updater*.deb` instead of generic `*.deb`.
 - Added debug output to help troubleshoot package detection issues.
+- Added Python wheel (.whl) and source distribution (.tar.gz) uploads to GitHub releases for manual installation.
 
 ## [0.2.15] - 2025-08-14
 
