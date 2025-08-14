@@ -47,11 +47,13 @@ brew install adambirds/homebrew-pypi-package-updater/pypi-package-updater
 
 ### Via APT (Debian/Ubuntu)
 
+#### From the ADB APT Repository (Recommended)
+
 ```bash
-# Download and install the .deb package from GitHub releases
-wget https://github.com/adambirds/pypi-package-updater/releases/latest/download/pypi-package-updater_*.deb
-sudo dpkg -i pypi-package-updater_*.deb
-sudo apt-get install -f  # Fix any dependency issues
+# Add the custom APT repository
+echo "deb [trusted=yes] https://adambirds.github.io/adb-apt-repo/ stable main" | sudo tee /etc/apt/sources.list.d/adambirds.list
+sudo apt update
+sudo apt install pypi-package-updater
 ```
 
 ### Via Snap (Cross-platform Linux)
