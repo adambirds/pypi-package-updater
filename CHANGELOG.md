@@ -13,7 +13,7 @@
 - Added debug output to help troubleshoot package detection issues.
 - Added Python wheel (.whl) and source distribution (.tar.gz) uploads to GitHub releases for manual installation.
 - Added automatic Snap Store publishing using snapcore/action-publish for stable channel releases.
-- Added automatic Debian package uploads to custom APT repository at https://adambirds.github.io/adb-apt-repo/ for easier installation. [0.2.16] - 2025-08-14
+- Added automatic Debian package uploads to custom APT repository at https://adambirds.github.io/adb-apt-repo/ for easier installation.
 
 ## [0.2.15] - 2025-08-14
 
