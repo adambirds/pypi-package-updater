@@ -183,6 +183,7 @@ jobs:
         DEB_FILE=$(find .. -maxdepth 1 -name "pypi-package-updater*.deb" | head -1)
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
+          PACKAGE_NAME=$(basename "$DEB_FILE")
           
           # Clone the APT repository
           git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
@@ -193,15 +194,22 @@ jobs:
           git config user.name "github-actions[bot]"
           
           # Copy the package to testing/main directory
-          cp "../$DEB_FILE" incoming/testing/main/
+          cp "$DEB_FILE" incoming/testing/main/
           
-          # Commit and push
-          git add incoming/testing/main/
-          PACKAGE_NAME=$(basename "$DEB_FILE")
-          git commit -m "feat: Add testing/main package $PACKAGE_NAME."
-          git push
-          
-          echo "✅ Package $PACKAGE_NAME uploaded to APT repository (testing/main)"
+          # Check if the file was actually copied and is different
+          if [ -f "incoming/testing/main/$PACKAGE_NAME" ]; then
+            echo "Package copied successfully to incoming/testing/main/$PACKAGE_NAME"
+            
+            # Commit and push
+            git add "incoming/testing/main/$PACKAGE_NAME"
+            git commit -m "feat: Add testing/main package $PACKAGE_NAME."
+            git push
+            
+            echo "✅ Package $PACKAGE_NAME uploaded to APT repository (testing/main)"
+          else
+            echo "❌ Failed to copy package to destination"
+            ls -la incoming/testing/main/
+          fi
         else
           echo "❌ No .deb file found"
           echo "Available .deb files:"
@@ -301,6 +309,7 @@ jobs:
         DEB_FILE=$(find .. -maxdepth 1 -name "pypi-package-updater*.deb" | head -1)
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
+          PACKAGE_NAME=$(basename "$DEB_FILE")
           
           # Clone the APT repository
           git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
@@ -311,15 +320,22 @@ jobs:
           git config user.name "github-actions[bot]"
           
           # Copy the package to stable/main directory
-          cp "../$DEB_FILE" incoming/stable/main/
+          cp "$DEB_FILE" incoming/stable/main/
           
-          # Commit and push
-          git add incoming/stable/main/
-          PACKAGE_NAME=$(basename "$DEB_FILE")
-          git commit -m "feat: Add stable/main package $PACKAGE_NAME."
-          git push
-          
-          echo "✅ Package $PACKAGE_NAME uploaded to APT repository (stable/main)"
+          # Check if the file was actually copied and is different
+          if [ -f "incoming/stable/main/$PACKAGE_NAME" ]; then
+            echo "Package copied successfully to incoming/stable/main/$PACKAGE_NAME"
+            
+            # Commit and push
+            git add "incoming/stable/main/$PACKAGE_NAME"
+            git commit -m "feat: Add stable/main package $PACKAGE_NAME."
+            git push
+            
+            echo "✅ Package $PACKAGE_NAME uploaded to APT repository (stable/main)"
+          else
+            echo "❌ Failed to copy package to destination"
+            ls -la incoming/stable/main/
+          fi
         else
           echo "❌ No .deb file found"
           echo "Available .deb files:"
