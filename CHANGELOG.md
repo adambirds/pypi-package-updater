@@ -1,10 +1,6 @@
-# Changel### 🔧 CI/CD
-- Fixed Debian package detection in CI to avoid uploading system packages like `python3-pkg-resources`.
-- Updated package search to use specific pattern `pypi-package-updater*.deb` instead of generic `*.deb`.
-- Added debug output to help troubleshoot package detection issues.
-- Added Python wheel (.whl) and source distribution (.tar.gz) uploads to GitHub releases for manual installation.
-- Added automatic Snap Store publishing using snapcore/action-publish for stable channel releases.
-- Added automatic Debian package uploads to custom APT repository at https://adambirds.github.io/adb-apt-repo/ for easier installation. [0.2.16] - 2025-08-14
+# Changelog
+
+## [0.2.16] - 2025-08-14
 
 ### � Documentation
 - Updated README with comprehensive installation methods including manual GitHub releases downloads.
@@ -17,6 +13,7 @@
 - Added debug output to help troubleshoot package detection issues.
 - Added Python wheel (.whl) and source distribution (.tar.gz) uploads to GitHub releases for manual installation.
 - Added automatic Snap Store publishing using snapcore/action-publish for stable channel releases.
+- Added automatic Debian package uploads to custom APT repository at https://adambirds.github.io/adb-apt-repo/ for easier installation. [0.2.16] - 2025-08-14
 
 ## [0.2.15] - 2025-08-14
 
