@@ -179,7 +179,8 @@ jobs:
     - name: Upload Debian Package to APT Repository (Testing)
       run: |
         # Find the actual .deb file created by dpkg-buildpackage
-        DEB_FILE=$(find . -maxdepth 2 -name "pypi-package-updater*.deb" | head -1)
+        # dpkg-buildpackage creates files in the parent directory
+        DEB_FILE=$(find .. -maxdepth 1 -name "pypi-package-updater*.deb" | head -1)
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           
@@ -192,7 +193,7 @@ jobs:
         else
           echo "No .deb file found"
           echo "Available .deb files:"
-          find . -name "*.deb" -ls
+          find .. -name "*.deb" -ls
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.APT_REPO_TOKEN }}
@@ -286,7 +287,8 @@ jobs:
     - name: Upload Debian Package to APT Repository (Stable)
       run: |
         # Find the actual .deb file created by dpkg-buildpackage
-        DEB_FILE=$(find . -maxdepth 2 -name "pypi-package-updater*.deb" | head -1)
+        # dpkg-buildpackage creates files in the parent directory
+        DEB_FILE=$(find .. -maxdepth 1 -name "pypi-package-updater*.deb" | head -1)
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           
@@ -299,7 +301,7 @@ jobs:
         else
           echo "No .deb file found"
           echo "Available .deb files:"
-          find . -name "*.deb" -ls
+          find .. -name "*.deb" -ls
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.APT_REPO_TOKEN }}
@@ -326,8 +328,8 @@ jobs:
     - name: Upload Debian Package
       run: |
         # Find the actual .deb file created by dpkg-buildpackage
-        # Look specifically for files matching our package name pattern
-        DEB_FILE=$(find . -maxdepth 2 -name "pypi-package-updater*.deb" | head -1)
+        # Look specifically for files matching our package name pattern in parent directory
+        DEB_FILE=$(find .. -maxdepth 1 -name "pypi-package-updater*.deb" | head -1)
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           # Use GitHub CLI to upload the asset
@@ -335,7 +337,7 @@ jobs:
         else
           echo "No .deb file found"
           echo "Available .deb files:"
-          find . -name "*.deb" -ls
+          find .. -name "*.deb" -ls
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
