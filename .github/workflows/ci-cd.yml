@@ -188,7 +188,9 @@ jobs:
           DEB_FILE_ABS=$(realpath "$DEB_FILE")
           echo "Absolute path: $DEB_FILE_ABS"
           
-          # Clone the APT repository
+          # Clone the APT repository to /tmp to avoid any git conflicts
+          cd /tmp
+          echo "Working directory: $(pwd)"
           git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
           
           # Copy the package to testing/main directory using absolute path
@@ -200,13 +202,26 @@ jobs:
             
             # Change to APT repo directory and run git commands
             cd apt-repo
+            echo "Changed to APT repo directory: $(pwd)"
+            echo "Git repository status:"
+            git status
+            echo "Git remote info:"
+            git remote -v
             
             # Set up git config
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git config user.name "github-actions[bot]"
             
-            # Add and commit the specific file
-            git add "incoming/testing/main/$PACKAGE_NAME"
+            # Check if file is being ignored
+            echo "Checking if file is ignored:"
+            git check-ignore "incoming/testing/main/$PACKAGE_NAME" || echo "File is not ignored"
+            
+            # List gitignore files that might affect this
+            echo "Gitignore files in repo:"
+            find . -name ".gitignore" -exec echo "=== {} ===" \; -exec cat {} \;
+            
+            # Add and commit the specific file with force if needed
+            git add "incoming/testing/main/$PACKAGE_NAME" || git add -f "incoming/testing/main/$PACKAGE_NAME"
             git status
             git commit -m "feat: Add testing/main package $PACKAGE_NAME."
             git push
@@ -320,7 +335,9 @@ jobs:
           DEB_FILE_ABS=$(realpath "$DEB_FILE")
           echo "Absolute path: $DEB_FILE_ABS"
           
-          # Clone the APT repository
+          # Clone the APT repository to /tmp to avoid any git conflicts
+          cd /tmp
+          echo "Working directory: $(pwd)"
           git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
           
           # Copy the package to stable/main directory using absolute path
@@ -332,13 +349,26 @@ jobs:
             
             # Change to APT repo directory and run git commands
             cd apt-repo
+            echo "Changed to APT repo directory: $(pwd)"
+            echo "Git repository status:"
+            git status
+            echo "Git remote info:"
+            git remote -v
             
             # Set up git config
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git config user.name "github-actions[bot]"
             
-            # Add and commit the specific file
-            git add "incoming/stable/main/$PACKAGE_NAME"
+            # Check if file is being ignored
+            echo "Checking if file is ignored:"
+            git check-ignore "incoming/stable/main/$PACKAGE_NAME" || echo "File is not ignored"
+            
+            # List gitignore files that might affect this
+            echo "Gitignore files in repo:"
+            find . -name ".gitignore" -exec echo "=== {} ===" \; -exec cat {} \;
+            
+            # Add and commit the specific file with force if needed
+            git add "incoming/stable/main/$PACKAGE_NAME" || git add -f "incoming/stable/main/$PACKAGE_NAME"
             git status
             git commit -m "feat: Add stable/main package $PACKAGE_NAME."
             git push
