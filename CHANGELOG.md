@@ -2,7 +2,12 @@
 
 ## [0.2.16] - 2025-08-14
 
-### 🔧 CI/CD
+### � Documentation
+- Updated README with comprehensive installation methods including manual GitHub releases downloads.
+- Added detailed instructions for setting up Snap Store credentials for maintainers.
+- Documented all available package formats and automated publishing workflow.
+
+### �🔧 CI/CD
 - Fixed Debian package detection in CI to avoid uploading system packages like `python3-pkg-resources`.
 - Updated package search to use specific pattern `pypi-package-updater*.deb` instead of generic `*.deb`.
 - Added debug output to help troubleshoot package detection issues.
