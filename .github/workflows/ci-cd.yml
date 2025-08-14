@@ -173,6 +173,27 @@ jobs:
         cp -r ../packaging/debian .
         dpkg-buildpackage -us -uc
 
+    - name: Upload Debian Package to APT Repository (Testing)
+      run: |
+        # Find the actual .deb file created by dpkg-buildpackage
+        DEB_FILE=$(find . -maxdepth 2 -name "pypi-package-updater*.deb" | head -1)
+        if [ -n "$DEB_FILE" ]; then
+          echo "Found Debian package: $DEB_FILE"
+          
+          # Download upload script
+          curl -O https://raw.githubusercontent.com/AdamBirds/adb-apt-repo/main/scripts/upload-to-apt-repo.sh
+          chmod +x upload-to-apt-repo.sh
+          
+          # Upload to testing distribution
+          ./upload-to-apt-repo.sh "$DEB_FILE" testing main
+        else
+          echo "No .deb file found"
+          echo "Available .deb files:"
+          find . -name "*.deb" -ls
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.APT_REPO_TOKEN }}
+
     - name: Build Snap Package (Test)
       run: |
         sudo apt update
@@ -255,6 +276,27 @@ jobs:
         cd pypi_package_updater-*
         cp -r ../packaging/debian .
         dpkg-buildpackage -us -uc
+
+    - name: Upload Debian Package to APT Repository (Stable)
+      run: |
+        # Find the actual .deb file created by dpkg-buildpackage
+        DEB_FILE=$(find . -maxdepth 2 -name "pypi-package-updater*.deb" | head -1)
+        if [ -n "$DEB_FILE" ]; then
+          echo "Found Debian package: $DEB_FILE"
+          
+          # Download upload script
+          curl -O https://raw.githubusercontent.com/AdamBirds/adb-apt-repo/main/scripts/upload-to-apt-repo.sh
+          chmod +x upload-to-apt-repo.sh
+          
+          # Upload to stable distribution for releases
+          ./upload-to-apt-repo.sh "$DEB_FILE" stable main
+        else
+          echo "No .deb file found"
+          echo "Available .deb files:"
+          find . -name "*.deb" -ls
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.APT_REPO_TOKEN }}
 
     - name: Build Snap package with dynamic version
       run: |
