@@ -184,6 +184,9 @@ jobs:
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           PACKAGE_NAME=$(basename "$DEB_FILE")
+          # Convert to absolute path before changing directories
+          DEB_FILE_ABS=$(realpath "$DEB_FILE")
+          echo "Absolute path: $DEB_FILE_ABS"
           
           # Clone the APT repository
           git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
@@ -193,8 +196,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           
-          # Copy the package to testing/main directory
-          cp "$DEB_FILE" incoming/testing/main/
+          # Copy the package to testing/main directory using absolute path
+          cp "$DEB_FILE_ABS" incoming/testing/main/
           
           # Check if the file was actually copied and is different
           if [ -f "incoming/testing/main/$PACKAGE_NAME" ]; then
@@ -310,6 +313,9 @@ jobs:
         if [ -n "$DEB_FILE" ]; then
           echo "Found Debian package: $DEB_FILE"
           PACKAGE_NAME=$(basename "$DEB_FILE")
+          # Convert to absolute path before changing directories
+          DEB_FILE_ABS=$(realpath "$DEB_FILE")
+          echo "Absolute path: $DEB_FILE_ABS"
           
           # Clone the APT repository
           git clone https://x-access-token:${{ secrets.APT_REPO_TOKEN }}@github.com/adambirds/adb-apt-repo.git apt-repo
@@ -319,8 +325,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           
-          # Copy the package to stable/main directory
-          cp "$DEB_FILE" incoming/stable/main/
+          # Copy the package to stable/main directory using absolute path
+          cp "$DEB_FILE_ABS" incoming/stable/main/
           
           # Check if the file was actually copied and is different
           if [ -f "incoming/stable/main/$PACKAGE_NAME" ]; then
