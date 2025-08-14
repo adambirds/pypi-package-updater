@@ -7,6 +7,7 @@
 - Updated package search to use specific pattern `pypi-package-updater*.deb` instead of generic `*.deb`.
 - Added debug output to help troubleshoot package detection issues.
 - Added Python wheel (.whl) and source distribution (.tar.gz) uploads to GitHub releases for manual installation.
+- Added automatic Snap Store publishing using snapcore/action-publish for stable channel releases.
 
 ## [0.2.15] - 2025-08-14
 

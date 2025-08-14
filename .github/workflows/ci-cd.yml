@@ -267,6 +267,14 @@ jobs:
         sudo snap install snapcraft --classic
         snapcraft --destructive-mode
 
+    - name: Upload Snap to Snap Store
+      uses: snapcore/action-publish@v1
+      env:
+        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+      with:
+        snap: '*.snap'
+        release: stable
+
     - name: Upload Debian Package
       run: |
         # Find the actual .deb file created by dpkg-buildpackage
