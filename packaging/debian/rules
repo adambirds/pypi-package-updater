@@ -1,23 +1,11 @@
 #!/usr/bin/make -f
 
-# Debian package build rules
-# This file tells dpkg-buildpackage how to build your package
+export PYBUILD_NAME=pypi-package-updater
+# Use the upstream version (no Debian -1 suffix) for the Python version string:
+export SETUPTOOLS_SCM_PRETEND_VERSION := $(DEB_UPSTREAM_VERSION)
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild
 
-override_dh_auto_clean:
-	python3 setup.py clean -a
-	find . -name \*.pyc -delete
-
-override_dh_auto_build:
-	dh_auto_build
-
+# Skip tests during package build since test dependencies aren't in Build-Depends
 override_dh_auto_test:
-	# Skip tests during package build (optional)
-	# python3 -m pytest tests/
-
-override_dh_auto_install:
-	python3 setup.py install --root=$(CURDIR)/debian/pypi-package-updater --prefix=/usr
-
-override_dh_usrlocal:

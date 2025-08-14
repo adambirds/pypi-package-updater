@@ -6,6 +6,8 @@ Build-Depends: debhelper-compat (= 13),
                dh-python,
                python3-all,
                python3-setuptools,
+               python3-setuptools-scm,
+               python3-wheel,
                python3-aiohttp,
                python3-packaging
 Standards-Version: 4.6.0

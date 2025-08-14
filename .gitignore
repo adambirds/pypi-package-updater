@@ -70,4 +70,13 @@ Thumbs.db
 .dmypy.json
 dmypy.json
 
+# Debian build artifacts
+.pybuild/
+debian/
+*.deb
+*.dsc
+*.tar.gz
+*.buildinfo
+*.changes
+
 pypi_updater/_version.py
