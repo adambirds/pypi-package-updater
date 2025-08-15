@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.19] - 2025-08-15
+
+### CI/CD
+- Change the way the snap is built.
+
 ## [0.2.18] - 2025-08-15
 
 ### Build
