@@ -17,24 +17,35 @@ jobs:
           
       - name: Update Homebrew Formula
         run: |
-          # Download the release tarball to calculate SHA256
-          curl -L -o release.tar.gz "https://github.com/adambirds/pypi-package-updater/archive/refs/tags/${{ github.ref_name }}.tar.gz"
-          
-          # Calculate SHA256
-          SHA256=$(sha256sum release.tar.gz | cut -d' ' -f1)
-          echo "Calculated SHA256: $SHA256"
-          
           # Remove 'v' prefix from tag for version
           VERSION=${{ github.ref_name }}
           VERSION=${VERSION#v}
           
-          # Update the formula file
-          sed -i "s|url \".*\"|url \"https://github.com/adambirds/pypi-package-updater/archive/refs/tags/${{ github.ref_name }}.tar.gz\"|g" homebrew-tap/Formula/pypi-package-updater.rb
-          sed -i "s|sha256 \".*\"|sha256 \"$SHA256\"|g" homebrew-tap/Formula/pypi-package-updater.rb
-          sed -i "s|version \".*\"|version \"$VERSION\"|g" homebrew-tap/Formula/pypi-package-updater.rb
+          # Get PyPI package information
+          PYPI_DATA=$(curl -s "https://pypi.org/pypi/pypi-package-updater/${VERSION}/json")
+          PYPI_URL=$(echo "$PYPI_DATA" | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          for file in data['urls']:
+              if file['filename'].endswith('.tar.gz'):
+                  print(file['url'])
+                  break
+          ")
+          PYPI_SHA256=$(echo "$PYPI_DATA" | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          for file in data['urls']:
+              if file['filename'].endswith('.tar.gz'):
+                  print(file['digests']['sha256'])
+                  break
+          ")
           
-          # Clean up
-          rm release.tar.gz
+          echo "PyPI URL: $PYPI_URL"
+          echo "PyPI SHA256: $PYPI_SHA256"
+          
+          # Update the formula file - only update the main package URL and SHA256
+          sed -i "0,/url \".*\"/{s|url \".*\"|url \"$PYPI_URL\"|;}" homebrew-tap/Formula/pypi-package-updater.rb
+          sed -i "0,/sha256 \".*\"/{s|sha256 \".*\"|sha256 \"$PYPI_SHA256\"|;}" homebrew-tap/Formula/pypi-package-updater.rb
           
       - name: Commit and Push Formula Updates
         run: |

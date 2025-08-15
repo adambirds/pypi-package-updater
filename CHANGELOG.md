@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.21] - 2025-08-15
+
+### Features
+- Add Homebrew formula with complete dependency resolution
+- Create automated dependency discovery script for Homebrew resources
+- Fix console script entry point to use synchronous wrapper
+
+### Build
+- Add Homebrew formula with all 12 required dependencies (direct and transitive)
+- Update entry point in setup.py to point to synchronous CLI wrapper
+- Create scripts/generate_homebrew_resources.py for automated dependency discovery
+
+### Dependencies
+- Include all transitive dependencies in Homebrew formula:
+  - aiohappyeyeballs, aiosignal, attrs, frozenlist, idna, multidict, propcache, yarl
+- Update Homebrew tap workflow to use PyPI URLs instead of GitHub source
+
 ## [0.2.20] - 2025-08-15
 
 # Build

@@ -81,7 +81,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "pypi-update=pypi_updater.cli:main",
+            "pypi-update=update_packages:cli_main",
         ],
     },
     classifiers=[
