@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.22] - 2025-08-15
+
+### Bug Fixes
+- Include update_packages.py in package distribution to fix console script entry point
+- Ensure pypi-update command works correctly after installation
+
 ## [0.2.21] - 2025-08-15
 
 ### Features

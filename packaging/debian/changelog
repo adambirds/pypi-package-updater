@@ -1,3 +1,9 @@
+pypi-package-updater (0.2.22-1) unstable; urgency=medium
+
+  * Include update_packages.py in package distribution to fix console script entry point
+  * Ensure pypi-update command works correctly after installation
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Fri, 15 Aug 2025 00:00:00 +0000
 pypi-package-updater (0.2.21-1) unstable; urgency=medium
 
   * Add Homebrew formula with complete dependency resolution

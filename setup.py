@@ -1,6 +1,10 @@
 """
 Setup configuration for PyPI Package Updater.
-Reads dependencies from requirements files to maintain single source of truth.
+Reads dependencies from requirem    entry_points={
+        "console_scripts": [
+            "pypi-update=update_packages:cli_main",
+        ],
+    },files to maintain single source of truth.
 """
 
 from setuptools import setup, find_packages
@@ -72,6 +76,7 @@ setup(
         "Issues": "https://github.com/adambirds/pypi-package-updater/issues",
     },
     packages=find_packages(),
+    py_modules=["update_packages"],
     include_package_data=True,
     python_requires=">=3.11",
     setup_requires=["setuptools_scm"],
@@ -81,7 +86,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "pypi-update=update_packages:cli_main",
+            "pypi-update=pypi_updater.cli:cli_main",
         ],
     },
     classifiers=[
