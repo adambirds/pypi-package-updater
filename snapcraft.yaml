@@ -33,9 +33,9 @@ parts:
       - requirements/common.txt
     stage-packages:
       - python3-pkg-resources
+      - python3-setuptools-scm
     override-pull: |
       craftctl default
-      # Install setuptools_scm to get version
-      python3 -m pip install setuptools_scm
+      # Get version using setuptools_scm (now available as system package)
       VERSION=$(python3 -c "import setuptools_scm; print(setuptools_scm.get_version())")
       craftctl set version="$VERSION"
