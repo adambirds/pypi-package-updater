@@ -32,11 +32,12 @@ parts:
     python-requirements:
       - requirements/common.txt
     build-packages:
+      - git
       - python3-setuptools-scm
     stage-packages:
       - python3-pkg-resources
     override-pull: |
       craftctl default
-      # Get version using setuptools_scm (now available as build package)
+      # Get version using setuptools_scm (now git is available)
       VERSION=$(python3 -c "import setuptools_scm; print(setuptools_scm.get_version())")
       craftctl set version="$VERSION"
