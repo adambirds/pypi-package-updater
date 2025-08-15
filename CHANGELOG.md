@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.17] - 2025-08-15
+
+### Documentation
+- Update apt instructions in README.md.
+
 ## [0.2.16] - 2025-08-14
 
 ### � Documentation
