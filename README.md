@@ -51,7 +51,8 @@ brew install adambirds/homebrew-pypi-package-updater/pypi-package-updater
 
 ```bash
 # Add the custom APT repository
-echo "deb [trusted=yes] https://adambirds.github.io/adb-apt-repo/ stable main" | sudo tee /etc/apt/sources.list.d/adambirds.list
+echo "deb https://adambirds.github.io/adb-apt-repo stable main" | sudo tee /etc/apt/sources.list.d/adb-apt-repo.list
+curl -fsSL https://adambirds.github.io/adb-apt-repo/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/adb-apt-repo.gpg
 sudo apt update
 sudo apt install pypi-package-updater
 ```
