@@ -1,4 +1,4 @@
-name: Test, Lint, and Publish to PyPI
+name: Test, Lint, and Publish to PyPI and Package Managers
 
 on:
   push:
@@ -297,6 +297,53 @@ jobs:
         
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+    
+    - name: Update Homebrew Tap
+      run: |
+        # Clone the homebrew tap repository
+        git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/adambirds/homebrew-pypi-package-updater.git homebrew-tap
+        
+        # Remove 'v' prefix from tag for version
+        VERSION=${{ github.ref_name }}
+        VERSION=${VERSION#v}
+        
+        # Get PyPI package information
+        PYPI_DATA=$(curl -s "https://pypi.org/pypi/pypi-package-updater/${VERSION}/json")
+        PYPI_URL=$(echo "$PYPI_DATA" | python3 -c "
+        import json, sys
+        data = json.load(sys.stdin)
+        for file in data['urls']:
+            if file['filename'].endswith('.tar.gz'):
+                print(file['url'])
+                break
+        ")
+        PYPI_SHA256=$(echo "$PYPI_DATA" | python3 -c "
+        import json, sys
+        data = json.load(sys.stdin)
+        for file in data['urls']:
+            if file['filename'].endswith('.tar.gz'):
+                print(file['digests']['sha256'])
+                break
+        ")
+        
+        echo "PyPI URL: $PYPI_URL"
+        echo "PyPI SHA256: $PYPI_SHA256"
+        
+        # Update the formula file - only update the main package URL and SHA256
+        sed -i "0,/url \".*\"/{s|url \".*\"|url \"$PYPI_URL\"|;}" homebrew-tap/Formula/pypi-package-updater.rb
+        sed -i "0,/sha256 \".*\"/{s|sha256 \".*\"|sha256 \"$PYPI_SHA256\"|;}" homebrew-tap/Formula/pypi-package-updater.rb
+        
+        # Commit and push the changes
+        cd homebrew-tap
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "GitHub Actions"
+        git add Formula/pypi-package-updater.rb
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update Homebrew formula to ${{ github.ref_name }}"
+          git push
+        fi
     
     - name: Convert CHANGELOG.md to Debian changelog
       if: github.ref_type != 'tag'
