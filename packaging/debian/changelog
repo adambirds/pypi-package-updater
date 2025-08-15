@@ -1,3 +1,8 @@
+pypi-package-updater (0.2.20-1) unstable; urgency=medium
+
+  * Ensure Debian Control File is set to require Python 3.11 or higher.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Fri, 15 Aug 2025 00:00:00 +0000
 pypi-package-updater (0.2.19-1) unstable; urgency=medium
 
   * Change the way the snap is built.

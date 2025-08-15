@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.20] - 2025-08-15
+
+# Build
+- Ensure Debian Control File is set to require Python 3.11 or higher.
+
 ## [0.2.19] - 2025-08-15
 
 ### CI/CD

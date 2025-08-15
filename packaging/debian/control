@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Adam Birds <adam.birds@adbwebdesigns.co.uk>
 Build-Depends: debhelper-compat (= 13),
                dh-python,
-               python3-all,
+               python3-all (>= 3.11),
                python3-setuptools,
                python3-setuptools-scm,
                python3-wheel,
@@ -19,6 +19,7 @@ Package: pypi-package-updater
 Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
+         python3 (>= 3.11),
          python3-aiohttp,
          python3-packaging
 Description: Tool to update Python package dependencies
