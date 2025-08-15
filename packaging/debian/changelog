@@ -1,3 +1,8 @@
+pypi-package-updater (0.2.18-1) unstable; urgency=medium
+
+  * Prevent `setup.py clean` from running during deb build.
+
+ -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Fri, 15 Aug 2025 00:00:00 +0000
 pypi-package-updater (0.2.17-1) unstable; urgency=medium
 
   * Update apt instructions in README.md.

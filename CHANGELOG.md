@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.18] - 2025-08-15
+
+### Build
+- Prevent `setup.py clean` from running during deb build.
+
 ## [0.2.17] - 2025-08-15
 
 ### Documentation
