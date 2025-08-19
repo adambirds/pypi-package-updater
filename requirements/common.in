@@ -1,7 +1,7 @@
-# Core runtime dependencies for PyPI Updater
-aiohttp==3.12.15
-packaging==25.0
-# TOML support for Python < 3.11
-tomli==2.2.1
-# Solve dependency issues
-typing-extensions==4.14.1
+# Core runtime dependencies for PyPI Updater (library-friendly)
+aiohttp>=3.9,<4
+packaging>=23.2
+# Only needed on older Pythons; safe to drop if you require >=3.11
+tomli>=2.0.1 ; python_version < "3.11"
+# Backports for older Pythons; 3.12+ generally fine, but harmless.
+typing-extensions>=4.11 ; python_version < "3.13"

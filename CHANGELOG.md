@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.23] - 2025-08-20
+
+### Build
+- Relax dependency versions to prevent issues in applications.
+
 ## [0.2.22] - 2025-08-15
 
 ### Bug Fixes
