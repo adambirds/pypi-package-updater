@@ -4,6 +4,7 @@
 
 ### Build
 - Relax dependency versions to prevent issues in applications.
+- Remove snap build as not needed due to strictness and accessing files.
 
 ## [0.2.22] - 2025-08-15
 

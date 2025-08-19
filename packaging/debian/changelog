@@ -1,6 +1,7 @@
 pypi-package-updater (0.2.23-1) unstable; urgency=medium
 
   * Relax dependency versions to prevent issues in applications.
+  * Remove snap build as not needed due to strictness and accessing files.
 
  -- Adam Birds <adam.birds@adbwebdesigns.co.uk>  Wed, 20 Aug 2025 00:00:00 +0000
 pypi-package-updater (0.2.22-1) unstable; urgency=medium

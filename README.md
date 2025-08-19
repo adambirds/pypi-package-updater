@@ -57,12 +57,6 @@ sudo apt update
 sudo apt install pypi-package-updater
 ```
 
-### Via Snap (Cross-platform Linux)
-
-```bash
-sudo snap install pypi-package-updater
-```
-
 ### Manual Installation from GitHub Releases
 
 You can download pre-built packages from the [GitHub Releases page](https://github.com/adambirds/pypi-package-updater/releases):
@@ -78,10 +72,6 @@ You can download pre-built packages from the [GitHub Releases page](https://gith
 - **Debian Package (`.deb`)**: For Debian/Ubuntu systems
   ```bash
   sudo dpkg -i pypi-package-updater_X.X.X-1_all.deb
-  ```
-- **Snap Package (`.snap`)**: For manual snap installation
-  ```bash
-  sudo snap install --dangerous pypi-package-updater_X.X.X_amd64.snap
   ```
 
 ### From Source
@@ -327,70 +317,15 @@ This project uses automated CI/CD to build and distribute packages across multip
 On each release, the CI/CD pipeline automatically:
 
 1. **PyPI**: Publishes Python packages (wheel and source distribution)
-2. **Snap Store**: Publishes snap packages to the stable channel
-3. **GitHub Releases**: Uploads multiple package formats for manual download
-4. **Homebrew**: Updates the Homebrew tap with the latest version
+2. **GitHub Releases**: Uploads multiple package formats for manual download
+3. **Homebrew**: Updates the Homebrew tap with the latest version
 
 ### Package Formats Available
 
 - **Python Wheel (`.whl`)**: Universal Python package for `pip install`
 - **Source Distribution (`.tar.gz`)**: Python source package
 - **Debian Package (`.deb`)**: For Debian/Ubuntu systems
-- **Snap Package (`.snap`)**: Cross-platform Linux package
 - **Homebrew Formula**: For macOS and Linux via Homebrew
-
-### For Maintainers: Setting Up Snap Store Credentials
-
-To enable automatic Snap Store publishing, maintainers need to set up the `SNAPCRAFT_STORE_CREDENTIALS` secret:
-
-#### On Linux:
-
-1. **Install snapcraft locally**:
-   ```bash
-   sudo snap install snapcraft --classic
-   ```
-
-2. **Log in to the Snap Store**:
-   ```bash
-   snapcraft login
-   ```
-
-3. **Export credentials**:
-   ```bash
-   snapcraft export-login credentials.txt
-   ```
-
-#### On macOS:
-
-1. **Install snapcraft via Homebrew**:
-   ```bash
-   brew install snapcraft
-   ```
-
-2. **Log in to the Snap Store**:
-   ```bash
-   snapcraft login
-   ```
-
-3. **Export credentials**:
-   ```bash
-   snapcraft export-login credentials.txt
-   ```
-
-#### Adding Credentials to GitHub:
-
-4. **Add to GitHub Secrets**:
-   - Go to your repository's Settings → Secrets and variables → Actions
-   - Create a new secret named `SNAPCRAFT_STORE_CREDENTIALS`
-   - Paste the contents of `credentials.txt` as the value
-   - Delete the local `credentials.txt` file for security
-
-5. **Register your snap name** (if not already done):
-   ```bash
-   snapcraft register pypi-package-updater
-   ```
-
-The CI will now automatically upload new versions to the Snap Store when creating releases.
 
 ## Development
 
